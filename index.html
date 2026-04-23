@@ -2,176 +2,143 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Forever Journey ❤️</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>The Journey of Hearts ❤️</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 
     <style>
         :root {
             --primary-love: #ff758c;
-            --glass: rgba(255, 255, 255, 0.12);
+            --glass: rgba(255, 255, 255, 0.15);
         }
 
         body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
+            margin: 0; padding: 0; height: 100%;
             font-family: 'Poppins', sans-serif;
-            color: white;
-            text-align: center;
-            overflow: hidden;
+            background: #000; color: white;
+            overflow: hidden; touch-action: none;
         }
 
-        /* Deep Blurry Background */
+        /* Splash Screen */
+        #splash-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #1a0b14; z-index: 9999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+        }
+        .heart-beat {
+            font-size: 5rem; color: #ff758c;
+            animation: beat 1s infinite alternate;
+        }
+        @keyframes beat { from { transform: scale(1); } to { transform: scale(1.2); } }
+
+        /* Background */
         .bg-image {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: url('bg.png') no-repeat center center/cover;
-            filter: blur(8px) brightness(0.5);
-            transform: scale(1.1);
-            z-index: -1;
-        }
-
-        /* Floating Particles Overlay */
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, transparent 20%, rgba(0,0,0,0.4) 100%);
-            z-index: 0;
+            filter: blur(8px) brightness(0.5); z-index: 0; transform: scale(1.1);
         }
 
         .content {
-            position: relative;
-            z-index: 10;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+            position: relative; z-index: 10; height: 100%;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            padding: 20px; opacity: 0; /* Hidden initially for GSAP */
         }
 
-        /* Aesthetic Glass Panel */
+        /* Tilt Glass Card */
         .glass-panel {
-            background: var(--glass);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border-radius: 24px;
-            padding: 30px;
-            width: 90%;
-            max-width: 420px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-            margin-bottom: 20px;
+            background: var(--glass); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            border-radius: 24px; padding: 30px; width: 90%; max-width: 400px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4); margin-bottom: 30px;
+            transform-style: preserve-3d;
         }
 
         h2 {
-            font-family: 'Dancing Script', cursive;
-            font-size: 2.2rem;
-            margin-bottom: 20px;
+            font-family: 'Dancing Script', cursive; font-size: 2.2rem;
+            margin-bottom: 20px; text-align: center;
             background: linear-gradient(to right, #fff, #ff9a9e);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            transform: translateZ(30px);
         }
 
-        /* Premium Timer */
-        .timer-container {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
+        .timer-container { display: flex; justify-content: space-between; gap: 10px; transform: translateZ(40px); }
+        .timer-unit { flex: 1; padding: 10px 5px; background: rgba(0,0,0,0.4); border-radius: 12px; text-align: center;}
+        .timer-unit span { display: block; font-size: 1.8rem; font-weight: 600; color: var(--primary-love); }
+        .timer-unit small { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8; }
+
+        /* Scratch Card Area */
+        .scratch-container {
+            position: relative; width: 280px; height: 100px;
+            margin: 0 auto; border-radius: 15px; overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            transform: translateZ(50px);
         }
 
-        .timer-unit {
-            flex: 1;
-            padding: 10px 5px;
-            background: rgba(0,0,0,0.3);
-            border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.1);
+        #scratch-canvas { position: absolute; top: 0; left: 0; z-index: 2; cursor: crosshair; }
+
+        .hidden-content {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.9); z-index: 1;
+            display: flex; justify-content: center; align-items: center;
         }
 
-        .timer-unit span {
-            display: block;
-            font-size: 1.8rem;
-            font-weight: 600;
-            color: var(--primary-love);
-        }
-
-        .timer-unit small {
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-size: 0.65rem;
-            opacity: 0.8;
-        }
-
-        /* Fancy Letter Button */
         .main-btn {
-            background: rgba(255, 255, 255, 0.9);
-            color: #ff4b2b;
-            border: none;
-            padding: 18px 40px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-            transition: all 0.4s ease;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-top: 10px;
+            background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
+            color: white; border: none; padding: 12px 25px; font-size: 1.1rem;
+            font-weight: 600; border-radius: 50px; cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 117, 140, 0.4);
+            animation: pulseBtn 2s infinite; font-family: 'Poppins', sans-serif;
         }
 
-        .main-btn:hover {
-            transform: translateY(-5px);
-            background: #fff;
-            box-shadow: 0 15px 25px rgba(255, 117, 140, 0.4);
+        @keyframes pulseBtn {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
 
-        /* Floating Hearts Animation */
-        .floating-heart {
-            position: absolute;
-            color: rgba(255, 255, 255, 0.3);
-            pointer-events: none;
-            animation: float 6s linear infinite;
+        /* Custom SweetAlert Styling for Polaroid */
+        .polaroid-stack { display: flex; justify-content: center; gap: -20px; flex-wrap: wrap; margin-top: 15px;}
+        .polaroid { 
+            background: white; padding: 10px 10px 20px 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); 
+            width: 100px; transform: rotate(-5deg); transition: transform 0.3s;
         }
-
-        @keyframes float {
-            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
-        }
+        .polaroid:nth-child(2) { transform: rotate(5deg) translateY(10px); z-index: 2;}
+        .polaroid:nth-child(3) { transform: rotate(-2deg) translateY(-5px); z-index: 3;}
+        .polaroid img { width: 100%; height: 100px; object-fit: cover; }
     </style>
 </head>
 <body>
 
-    <div class="bg-image"></div>
-    <div class="overlay"></div>
+    <div id="splash-screen">
+        <div class="heart-beat">❤️</div>
+        <p style="font-family: 'Dancing Script'; font-size: 1.5rem; margin-top: 15px; color: #ff9a9e;">Loading our journey...</p>
+    </div>
 
-    <div class="content">
-        <div class="glass-panel animate__animated animate__fadeInDown">
-            <h2>Our Love Story Began...</h2>
+    <div class="bg-image"></div>
+    
+    <div class="content" id="main-content">
+        <div class="glass-panel" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.2">
+            <h2>Our Journey Began...</h2>
             <div class="timer-container" id="timer">
                 <div class="timer-unit"><span id="days">0</span><small>Days</small></div>
                 <div class="timer-unit"><span id="hours">0</span><small>Hrs</small></div>
                 <div class="timer-unit"><span id="mins">0</span><small>Mins</small></div>
                 <div class="timer-unit"><span id="secs">0</span><small>Secs</small></div>
             </div>
-        </div>
-
-        <div class="glass-panel animate__animated animate__fadeInUp">
-            <p style="margin-top:0; opacity: 0.9;">A special message is waiting for you...</p>
-            <button class="main-btn" onclick="openSurprise()">
-                <span>💌 Open Your Letter</span>
-            </button>
+            
+            <p style="text-align: center; font-size: 0.9rem; margin-top: 25px; opacity: 0.8; transform: translateZ(20px);">Scratch below to reveal a surprise!</p>
+            
+            <div class="scratch-container">
+                <div class="hidden-content">
+                    <button class="main-btn" onclick="openEnvelope()">📩 Open Letter</button>
+                </div>
+                <canvas id="scratch-canvas" width="280" height="100"></canvas>
+            </div>
         </div>
     </div>
 
@@ -180,58 +147,94 @@
     </audio>
 
     <script>
-        // Create Floating Hearts in Background
-        function createHeart() {
-            const heart = document.createElement('div');
-            heart.classList.add('floating-heart');
-            heart.innerHTML = '❤️';
-            heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.animationDuration = Math.random() * 3 + 4 + 's';
-            heart.style.fontSize = Math.random() * 20 + 10 + 'px';
-            document.body.appendChild(heart);
-            setTimeout(() => heart.remove(), 6000);
-        }
-        setInterval(createHeart, 800);
+        // --- 1. GSAP Intro Animation ---
+        window.onload = () => {
+            const tl = gsap.timeline();
+            tl.to("#splash-screen", { opacity: 0, duration: 1.5, delay: 1, display: "none" })
+              .to("#main-content", { opacity: 1, duration: 1 })
+              .from(".glass-panel", { y: 50, opacity: 0, duration: 1, ease: "back.out(1.7)" });
+            
+            initScratchCard(); // Initialize canvas after load
+        };
 
-        // Precise Countdown (December 27, 2025)
+        // --- 2. Timer Logic (Dec 27, 2025) ---
         const journeyStart = new Date("2025-12-27T00:00:00").getTime();
-        
-        function updateTimer() {
+        setInterval(() => {
             const now = new Date().getTime();
             const diff = Math.abs(now - journeyStart);
-            
             document.getElementById('days').innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
             document.getElementById('hours').innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             document.getElementById('mins').innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
             document.getElementById('secs').innerText = Math.floor((diff % (1000 * 60)) / 1000);
-        }
-        setInterval(updateTimer, 1000);
+        }, 1000);
 
-        function openSurprise() {
-            const music = document.getElementById('bgMusic');
-            music.play();
+        // --- 3. Scratch Card Logic ---
+        function initScratchCard() {
+            const canvas = document.getElementById('scratch-canvas');
+            const ctx = canvas.getContext('2d');
+            let isDrawing = false;
+
+            // Fill canvas with premium overlay
+            ctx.fillStyle = '#a6a6a6';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.font = "16px Poppins";
+            ctx.fillStyle = "#ffffff";
+            ctx.textAlign = "center";
+            ctx.fillText("Scratch Me 🪙", canvas.width/2, canvas.height/2 + 5);
+
+            // Setup scratching
+            ctx.globalCompositeOperation = 'destination-out';
+
+            function scratch(x, y) {
+                ctx.beginPath();
+                ctx.arc(x, y, 15, 0, Math.PI * 2);
+                ctx.fill();
+                // Check if scratched enough to auto-reveal (Optional, keeping it simple: just let them scratch)
+                if(navigator.vibrate) navigator.vibrate(10); // Haptic feedback on mobile
+            }
+
+            const getMousePos = (e) => {
+                const rect = canvas.getBoundingClientRect();
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                return { x: clientX - rect.left, y: clientY - rect.top };
+            };
+
+            canvas.addEventListener('mousedown', (e) => { isDrawing = true; scratch(getMousePos(e).x, getMousePos(e).y); });
+            canvas.addEventListener('touchstart', (e) => { isDrawing = true; scratch(getMousePos(e).x, getMousePos(e).y); }, {passive: false});
+            canvas.addEventListener('mousemove', (e) => { if(isDrawing) scratch(getMousePos(e).x, getMousePos(e).y); });
+            canvas.addEventListener('touchmove', (e) => { if(isDrawing){ e.preventDefault(); scratch(getMousePos(e).x, getMousePos(e).y); } }, {passive: false});
+            canvas.addEventListener('mouseup', () => isDrawing = false);
+            canvas.addEventListener('touchend', () => isDrawing = false);
+        }
+
+        // --- 4. Final Reveal (SweetAlert + Polaroid) ---
+        function openEnvelope() {
+            document.getElementById('scratch-canvas').style.display = 'none'; // Hide canvas completely
+            document.getElementById('bgMusic').play(); // Play music
             
-            confetti({
-                particleCount: 150,
-                spread: 70,
-                origin: { y: 0.6 },
-                colors: ['#ff758c', '#ff7eb3', '#ffffff']
-            });
+            confetti({ particleCount: 200, spread: 90, origin: { y: 0.5 }, colors: ['#ff758c', '#ffffff'] });
+            if(navigator.vibrate) navigator.vibrate([100, 50, 100]); // Celebration vibration
 
             Swal.fire({
-                title: '<span style="font-family: \'Dancing Script\', cursive; font-size: 2rem;">My Dear Tahiya,</span>',
+                title: '<span style="font-family: \'Dancing Script\', cursive; font-size: 2.2rem; color: #ff4b2b;">My Dear Tahiya,</span>',
                 html: `
-                    <div style="text-align: center; font-family: 'Poppins', sans-serif; line-height: 1.8; color: #555;">
-                        Every single moment since <b>December 27</b> has been a blessing. <br><br>
-                        Distance may keep us apart, but you're always in my heart. From my wallet to my soul—it's always been you. <br><br>
-                        Happy 4 Months of togetherness! <b>I love you endlessly. ❤️</b>
+                    <div style="font-family: 'Poppins', sans-serif; font-size: 1rem; color: #444; line-height: 1.6;">
+                        "Distance gives us a reason to love harder." <br><br>
+                        From the moment we started on <b>Dec 27</b>, every memory has been special. Here's a glimpse of us:
+                        
+                        <div class="polaroid-stack">
+                            <div class="polaroid"><img src="1.jpg" alt="Memory 1"></div>
+                            <div class="polaroid"><img src="2.jpg" alt="Memory 2"></div>
+                            <div class="polaroid"><img src="3.jpg" alt="Memory 3"></div>
+                        </div>
+                        <br>Happy 4 Months Anniversary! ❤️
                     </div>
                 `,
                 confirmButtonText: 'I Love You Too! ❤️',
                 confirmButtonColor: '#ff758c',
                 background: '#fff0f3',
-                showClass: { popup: 'animate__animated animate__zoomIn' },
-                hideClass: { popup: 'animate__animated animate__fadeOutOut' }
+                backdrop: `rgba(0,0,0,0.6)`
             });
         }
     </script>
