@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Our Forever Journey ❤️</title>
+    <title>Journey of Hearts ❤️</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -14,32 +14,28 @@
     <style>
         :root {
             --primary-love: #ff758c;
-            --glass: rgba(255, 255, 255, 0.15);
+            --glass: rgba(255, 255, 255, 0.12);
         }
 
         body, html {
             margin: 0; padding: 0; height: 100%;
             font-family: 'Poppins', sans-serif;
-            background: #000; color: white;
-            overflow: hidden; touch-action: none;
+            background: #0b0b0b; color: white;
+            overflow: hidden;
         }
 
-        #splash-screen {
+        /* Splash Screen */
+        #splash {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #1a0b14; z-index: 9999;
+            background: #12050c; z-index: 9999;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
         }
 
-        .heart-beat {
-            font-size: 5rem; color: #ff758c;
-            animation: beat 1s infinite alternate;
-        }
-        @keyframes beat { from { transform: scale(1); } to { transform: scale(1.2); } }
-
+        /* Background Setup */
         .bg-image {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: url('bg.png') no-repeat center center/cover;
-            filter: blur(8px) brightness(0.5); z-index: 0; transform: scale(1.1);
+            filter: blur(6px) brightness(0.4); z-index: 0; transform: scale(1.1);
         }
 
         .content {
@@ -48,186 +44,153 @@
             padding: 20px; opacity: 0;
         }
 
-        .glass-panel {
+        /* Premium Glass Card */
+        .glass-card {
             background: var(--glass); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            border-radius: 24px; padding: 30px; width: 90%; max-width: 400px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4); margin-bottom: 30px;
-            transform-style: preserve-3d;
+            border-radius: 30px; padding: 35px 25px; width: 85%; max-width: 380px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            text-align: center;
         }
 
         h2 {
             font-family: 'Dancing Script', cursive; font-size: 2.2rem;
-            margin-bottom: 20px; text-align: center;
-            background: linear-gradient(to right, #fff, #ff9a9e);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            transform: translateZ(30px);
+            margin-bottom: 25px; color: #fff;
+            text-shadow: 0 0 10px rgba(255, 117, 140, 0.5);
         }
 
-        .timer-container { display: flex; justify-content: space-between; gap: 10px; transform: translateZ(40px); }
-        .timer-unit { flex: 1; padding: 10px 5px; background: rgba(0,0,0,0.4); border-radius: 12px; text-align: center;}
-        .timer-unit span { display: block; font-size: 1.8rem; font-weight: 600; color: var(--primary-love); }
-        .timer-unit small { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8; }
+        /* Modern Timer */
+        .timer-box { display: flex; justify-content: space-around; gap: 8px; margin-bottom: 30px; }
+        .t-unit { background: rgba(0,0,0,0.3); padding: 12px 5px; border-radius: 15px; flex: 1; border: 1px solid rgba(255,255,255,0.05); }
+        .t-unit span { display: block; font-size: 1.6rem; font-weight: 600; color: var(--primary-love); }
+        .t-unit small { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.7; }
 
-        .scratch-container {
-            position: relative; width: 280px; height: 110px;
-            margin: 0 auto; border-radius: 15px; overflow: hidden;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-            transform: translateZ(50px); background: #eee;
+        /* Floating Button Style */
+        .magic-btn {
+            background: rgba(255, 255, 255, 0.95);
+            color: #ff4b2b; border: none; padding: 18px 35px;
+            font-size: 1.1rem; font-weight: 600; border-radius: 50px;
+            cursor: pointer; box-shadow: 0 10px 25px rgba(255, 117, 140, 0.3);
+            transition: 0.3s; display: flex; align-items: center; justify-content: center;
+            gap: 12px; margin: 0 auto; width: 100%;
         }
 
-        #scratch-canvas { position: absolute; top: 0; left: 0; z-index: 2; cursor: crosshair; }
+        .magic-btn:active { transform: scale(0.95); }
 
-        .hidden-content {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: white; z-index: 1;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
+        /* Polaroid Animation */
+        .p-stack { display: flex; justify-content: center; gap: 8px; margin-top: 15px; }
+        .p-img { 
+            width: 75px; height: 95px; background: #fff; padding: 5px 5px 15px; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2); transform: rotate(-5deg);
         }
+        .p-img img { width: 100%; height: 70px; object-fit: cover; }
 
-        .main-btn {
-            background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
-            color: white; border: none; padding: 12px 25px; font-size: 1rem;
-            font-weight: 600; border-radius: 50px; cursor: pointer;
-            box-shadow: 0 5px 15px rgba(255, 117, 140, 0.4);
-            font-family: 'Poppins', sans-serif;
+        /* Floating Hearts */
+        .heart {
+            position: absolute; color: rgba(255, 117, 140, 0.4);
+            pointer-events: none; z-index: 1; animation: floatUp 5s linear infinite;
         }
-
-        /* Polaroid Styling in Pop-up */
-        .polaroid-stack { display: flex; justify-content: center; gap: 10px; margin-top: 20px; overflow: visible;}
-        .polaroid { 
-            background: white; padding: 5px 5px 15px 5px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); 
-            width: 80px; border: 1px solid #ddd;
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
         }
-        .polaroid img { width: 100%; height: 80px; object-fit: cover; display: block; }
     </style>
 </head>
 <body>
 
-    <div id="splash-screen">
-        <div class="heart-beat">❤️</div>
-        <p style="font-family: 'Dancing Script'; font-size: 1.5rem; margin-top: 15px; color: #ff9a9e;">Loading our journey...</p>
+    <div id="splash">
+        <div style="font-size: 3rem;">💖</div>
+        <p style="font-family: 'Dancing Script'; font-size: 1.5rem; color: #ff9a9e;">Our Story is Loading...</p>
     </div>
 
     <div class="bg-image"></div>
-    
-    <div class="content" id="main-content">
-        <div class="glass-panel" data-tilt data-tilt-max="10">
-            <h2>Our Love Story Began...</h2>
-            <div class="timer-container" id="timer">
-                <div class="timer-unit"><span id="days">0</span><small>Days</small></div>
-                <div class="timer-unit"><span id="hours">0</span><small>Hrs</small></div>
-                <div class="timer-unit"><span id="mins">0</span><small>Mins</small></div>
-                <div class="timer-unit"><span id="secs">0</span><small>Secs</small></div>
-            </div>
+
+    <div class="content" id="main">
+        <div class="glass-card" data-tilt>
+            <h2>My Dear Tahiya ❤️</h2>
             
-            <p style="text-align: center; font-size: 0.9rem; margin: 20px 0 10px; opacity: 0.8;">Scratch to reveal a surprise!</p>
-            
-            <div class="scratch-container">
-                <div class="hidden-content">
-                    <button class="main-btn" onclick="openEnvelope()">💌 Open Your Letter</button>
-                </div>
-                <canvas id="scratch-canvas" width="280" height="110"></canvas>
+            <div class="timer-box">
+                <div class="t-unit"><span id="d">0</span><small>Days</small></div>
+                <div class="t-unit"><span id="h">0</span><small>Hours</small></div>
+                <div class="t-unit"><span id="m">0</span><small>Mins</small></div>
+                <div class="t-unit"><span id="s">0</span><small>Secs</small></div>
             </div>
+
+            <p style="font-size: 0.9rem; margin-bottom: 20px; opacity: 0.9;">Since December 27, 2025</p>
+
+            <button class="magic-btn" onclick="revealAll()">
+                <span>💌 Click for Surprise</span>
+            </button>
         </div>
     </div>
 
-    <audio id="bgMusic" loop preload="auto">
+    <audio id="music" loop>
         <source src="song.mp3" type="audio/mpeg">
     </audio>
 
     <script>
-        const music = document.getElementById('bgMusic');
-
+        // 1. Splash Screen & Reveal
         window.onload = () => {
-            gsap.to("#splash-screen", { opacity: 0, duration: 1, delay: 1.5, display: "none" });
-            gsap.to("#main-content", { opacity: 1, duration: 1, delay: 2 });
-            initScratchCard();
+            gsap.to("#splash", { opacity: 0, duration: 1, delay: 1.5, onComplete: () => {
+                document.getElementById('splash').style.display = 'none';
+                gsap.to("#main", { opacity: 1, y: 0, duration: 1 });
+            }});
+            createHearts();
         };
 
-        const journeyStart = new Date("2025-12-27T00:00:00").getTime();
+        // 2. Precise Countdown
+        const start = new Date("2025-12-27T00:00:00").getTime();
         setInterval(() => {
             const now = new Date().getTime();
-            const diff = Math.abs(now - journeyStart);
-            document.getElementById('days').innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
-            document.getElementById('hours').innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            document.getElementById('mins').innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            document.getElementById('secs').innerText = Math.floor((diff % (1000 * 60)) / 1000);
+            const diff = Math.abs(now - start);
+            document.getElementById('d').innerText = Math.floor(diff / (86400000));
+            document.getElementById('h').innerText = Math.floor((diff % 86400000) / 3600000);
+            document.getElementById('m').innerText = Math.floor((diff % 3600000) / 60000);
+            document.getElementById('s').innerText = Math.floor((diff % 60000) / 1000);
         }, 1000);
 
-        function initScratchCard() {
-            const canvas = document.getElementById('scratch-canvas');
-            const ctx = canvas.getContext('2d');
-            let isDrawing = false;
-            let musicStarted = false;
-
-            ctx.fillStyle = '#C0C0C0';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "#666";
-            ctx.font = "bold 18px Poppins";
-            ctx.textAlign = "center";
-            ctx.fillText("SCRATCH HERE ❤️", canvas.width/2, canvas.height/2 + 7);
-
-            ctx.globalCompositeOperation = 'destination-out';
-
-            function scratch(e) {
-                if (!isDrawing) return;
-                
-                // ঘষা শুরু হলে গান বাজবে
-                if (!musicStarted) {
-                    music.play().catch(err => console.log("Music play blocked by browser"));
-                    musicStarted = true;
-                }
-
-                const rect = canvas.getBoundingClientRect();
-                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-                const x = clientX - rect.left;
-                const y = clientY - rect.top;
-
-                ctx.beginPath();
-                ctx.arc(x, y, 20, 0, Math.PI * 2);
-                ctx.fill();
-
-                if (navigator.vibrate) navigator.vibrate(5);
-            }
-
-            canvas.addEventListener('mousedown', () => isDrawing = true);
-            canvas.addEventListener('touchstart', (e) => { isDrawing = true; e.preventDefault(); }, {passive: false});
-            window.addEventListener('mousemove', scratch);
-            window.addEventListener('touchmove', scratch, {passive: false});
-            window.addEventListener('mouseup', () => isDrawing = false);
-            window.addEventListener('touchend', () => isDrawing = false);
+        // 3. Floating Hearts Effect
+        function createHearts() {
+            setInterval(() => {
+                const h = document.createElement('div');
+                h.className = 'heart';
+                h.innerHTML = '❤️';
+                h.style.left = Math.random() * 100 + 'vw';
+                h.style.fontSize = (Math.random() * 20 + 10) + 'px';
+                h.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                document.body.appendChild(h);
+                setTimeout(() => h.remove(), 5000);
+            }, 600);
         }
 
-        function openEnvelope() {
-            // গান না চললে চালিয়ে দেওয়া
-            if (music.paused) music.play();
+        // 4. The Reveal Function
+        function revealAll() {
+            const audio = document.getElementById('music');
+            audio.play().catch(() => {}); // Play music
 
-            confetti({
-                particleCount: 150,
-                spread: 70,
-                origin: { y: 0.6 },
-                colors: ['#ff758c', '#ffffff']
-            });
+            // Celebration
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
 
             Swal.fire({
-                title: '<span style="font-family: \'Dancing Script\'; font-size: 2rem;">My Dear Tahiya,</span>',
+                title: '<span style="font-family: \'Dancing Script\'; font-size: 2.2rem; color: #ff4b2b;">To My Favorite Person,</span>',
                 html: `
-                    <div style="font-family: 'Poppins'; color: #444; line-height: 1.5;">
-                        Every moment since <b>Dec 27</b> has been amazing. 
-                        I'm so lucky to have you in my life. ❤️ <br><br>
+                    <div style="font-family: 'Poppins'; text-align: center; color: #444;">
+                        Every single day with you is a gift. <br> 
+                        <b>4 Months down, a lifetime to go!</b>
                         
-                        <div class="polaroid-stack">
-                            <div class="polaroid"><img src="1.jpg"></div>
-                            <div class="polaroid" style="transform: rotate(5deg);"><img src="2.jpg"></div>
-                            <div class="polaroid" style="transform: rotate(-5deg);"><img src="3.jpg"></div>
+                        <div class="p-stack">
+                            <div class="p-img"><img src="1.jpg"></div>
+                            <div class="p-img" style="transform: rotate(5deg);"><img src="2.jpg"></div>
+                            <div class="p-img" style="transform: rotate(-2deg);"><img src="3.jpg"></div>
                         </div>
-                        <br><b>Happy 4-Month Anniversary!</b>
+                        <br>
+                        <p style="font-style: italic; font-size: 0.9rem;">"You're the best thing that ever happened to me."</p>
                     </div>
                 `,
                 confirmButtonText: 'I Love You! ❤️',
                 confirmButtonColor: '#ff758c',
-                background: '#fff5f7'
+                background: '#fff0f3',
+                showClass: { popup: 'animate__animated animate__zoomIn' }
             });
         }
     </script>
