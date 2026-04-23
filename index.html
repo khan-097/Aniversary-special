@@ -2,63 +2,80 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Infinity & Beyond ❤️</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Neural Link: Tahiya ❤️</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 
     <style>
-        :root { --glow: #ff2d55; }
-        body, html { margin: 0; padding: 0; height: 100%; background: #000; overflow: hidden; font-family: 'Poppins', sans-serif; }
+        :root { --neon: #ff2d55; --glow: rgba(255, 45, 85, 0.6); }
+        body, html { margin: 0; padding: 0; height: 100%; background: #000; overflow: hidden; font-family: 'Orbitron', sans-serif; }
 
-        /* Initial Portal */
-        #portal {
-            position: fixed; width: 100%; height: 100%; display: flex;
+        /* 1. Cyberpunk Scanner UI */
+        #scanner-ui {
+            position: fixed; inset: 0; display: flex; flex-direction: column;
             justify-content: center; align-items: center; z-index: 100;
-            background: radial-gradient(circle, #1a0505 0%, #000 100%);
-            cursor: pointer;
+            background: radial-gradient(circle, #1a0508 0%, #000 100%);
         }
 
-        .heart-core {
-            font-size: 80px; filter: drop-shadow(0 0 20px var(--glow));
-            animation: beat 1.2s infinite;
+        .heart-scanner {
+            width: 120px; height: 120px; border: 2px solid var(--neon);
+            border-radius: 50%; display: flex; justify-content: center;
+            align-items: center; cursor: pointer; position: relative;
+            box-shadow: 0 0 20px var(--glow); transition: 0.3s;
         }
 
-        @keyframes beat {
-            0%, 100% { transform: scale(1); opacity: 0.8; }
-            50% { transform: scale(1.3); opacity: 1; filter: drop-shadow(0 0 40px var(--glow)); }
+        .heart-scanner::after {
+            content: "❤️"; font-size: 3rem; animation: pulse 1.5s infinite;
         }
 
-        /* 3D World Setup */
-        #world {
-            display: none; height: 100vh; width: 100vw; perspective: 1000px;
+        /* 2. The 3D Scene */
+        #scene-3d {
+            perspective: 1200px; width: 100vw; height: 100vh;
+            display: none; justify-content: center; align-items: center;
             background: url('bg.png') no-repeat center/cover;
         }
 
-        .scene {
-            width: 100%; height: 100%; position: relative;
-            transform-style: preserve-3d; transition: transform 0.1s ease-out;
+        .cube {
+            width: 250px; height: 250px; position: relative;
+            transform-style: preserve-3d; animation: rotateCube 20s infinite linear;
         }
 
-        /* Floating 3D Polaroids */
-        .card {
-            position: absolute; width: 220px; padding: 10px; background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 15px; transform-style: preserve-3d;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        .face {
+            position: absolute; width: 250px; height: 250px;
+            border: 2px solid var(--neon); border-radius: 10px;
+            overflow: hidden; backface-visibility: hidden;
+            box-shadow: inset 0 0 30px var(--glow);
         }
 
-        .card img { width: 100%; border-radius: 10px; pointer-events: none; }
-        
-        .card-1 { top: 15%; left: 10%; transform: translateZ(100px) rotateY(10deg); }
-        .card-2 { top: 40%; right: 10%; transform: translateZ(250px) rotateY(-15deg); }
-        .card-3 { bottom: 15%; left: 20%; transform: translateZ(150px) rotateX(10deg); }
+        /* Mapping your photos */
+        .front  { transform: translateZ(125px); }
+        .back   { transform: rotateY(180deg) translateZ(125px); }
+        .right  { transform: rotateY(90deg) translateZ(125px); }
+        .left   { transform: rotateY(-90deg) translateZ(125px); }
+        .top    { transform: rotateX(90deg) translateZ(125px); }
+        .bottom { transform: rotateX(-90deg) translateZ(125px); }
 
-        .text-overlay {
-            position: absolute; bottom: -50px; width: 100%; text-align: center;
-            font-size: 1.2rem; color: white; text-shadow: 0 0 10px var(--glow);
-            font-style: italic; opacity: 0;
+        .face img { width: 100%; height: 100%; object-fit: cover; filter: contrast(1.1); }
+
+        /* Text Styles */
+        .msg-overlay {
+            position: absolute; bottom: 10%; width: 100%; text-align: center;
+            font-family: 'Dancing Script', cursive; font-size: 1.8rem;
+            color: white; text-shadow: 0 0 10px var(--neon); opacity: 0;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.8; }
+        }
+
+        @keyframes rotateCube {
+            from { transform: rotateX(0deg) rotateY(0deg); }
+            to { transform: rotateX(360deg) rotateY(360deg); }
         }
     </style>
 </head>
@@ -66,67 +83,70 @@
 
     <audio id="bgMusic" loop><source src="song.mp3" type="audio/mpeg"></audio>
 
-    <div id="portal" onclick="breakTheReality()">
-        <div class="heart-core">❤️</div>
-        <p style="position:absolute; bottom:20%; color:white; letter-spacing:3px; opacity:0.5;">TAP TO ENTER OUR UNIVERSE</p>
+    <div id="scanner-ui">
+        <h2 style="color: var(--neon); letter-spacing: 5px; margin-bottom: 30px; font-size: 0.8rem;">AUTHENTICATION REQUIRED</h2>
+        <div class="heart-scanner" onclick="initLink()"></div>
+        <p id="status-text" style="color: #666; margin-top: 20px; font-size: 0.6rem;">PLACE FINGER TO CONNECT NEURAL LINK</p>
     </div>
 
-    <div id="world">
-        <div class="scene" id="scene">
-            <div class="card card-1"><img src="1.jpg"><div class="text-overlay">Forever...</div></div>
-            <div class="card card-2"><img src="2.jpg"><div class="text-overlay">To the Moon...</div></div>
-            <div class="card card-3"><img src="3.jpg"><div class="text-overlay">And Back ❤️</div></div>
+    <div id="scene-3d">
+        <div class="cube" id="cube">
+            <div class="face front"><img src="1.jpg"></div>
+            <div class="face back"><img src="2.jpg"></div>
+            <div class="face right"><img src="3.jpg"></div>
+            <div class="face left"><img src="1.jpg"></div>
+            <div class="face top"><img src="2.jpg"></div>
+            <div class="face bottom"><img src="3.jpg"></div>
+        </div>
+        <div class="msg-overlay" id="finalMsg">
+            Together for 4 Months... <br>
+            A Lifetime to go! ❤️
         </div>
     </div>
 
     <script>
-        const scene = document.getElementById('scene');
-        const bgMusic = document.getElementById('bgMusic');
+        function initLink() {
+            const music = document.getElementById('bgMusic');
+            music.play();
 
-        function breakTheReality() {
-            bgMusic.play();
-            
-            // GSAP Explosion Animation
-            gsap.to(".heart-core", { scale: 50, opacity: 0, duration: 1, ease: "power4.in" });
-            gsap.to("#portal", { opacity: 0, duration: 1.2, delay: 0.2, onComplete: () => {
-                document.getElementById('portal').style.display = 'none';
-                document.getElementById('world').style.display = 'block';
-                startWorld();
-            }});
-        }
+            // UI Transition
+            document.getElementById('status-text').innerText = "ACCESS GRANTED. INITIALIZING...";
+            document.getElementById('status-text').style.color = "#00ff00";
 
-        function startWorld() {
-            // Reveal cards one by one with glitch effect
-            gsap.from(".card", { 
-                scale: 0, opacity: 0, stagger: 0.5, duration: 1.5, 
-                ease: "elastic.out(1, 0.5)", onComplete: () => {
-                    gsap.to(".text-overlay", { opacity: 1, bottom: "10px", duration: 1 });
-                }
+            gsap.to("#scanner-ui", {
+                duration: 1.5, opacity: 0, scale: 2, display: "none", ease: "power4.in"
             });
 
-            // Gyroscope / Mouse Move effect
-            window.addEventListener('mousemove', (e) => {
-                let x = (window.innerWidth / 2 - e.pageX) / 20;
-                let y = (window.innerHeight / 2 - e.pageY) / 20;
-                scene.style.transform = `rotateY(${x}deg) rotateX(${-y}deg)`;
-            });
+            setTimeout(() => {
+                const scene = document.getElementById('scene-3d');
+                scene.style.display = "flex";
+                gsap.from("#scene-3d", { duration: 2, opacity: 0, scale: 0.5 });
+                
+                // Show Message
+                gsap.to("#finalMsg", { duration: 2, delay: 3, opacity: 1, y: -20 });
 
-            // Mobile Device Orientation
-            if (window.DeviceOrientationEvent) {
-                window.addEventListener('deviceorientation', (e) => {
-                    let x = e.gamma / 2; // Left to Right
-                    let y = e.beta / 2;  // Front to Back
-                    scene.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
-                });
-            }
+                // Celebration
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+            }, 1500);
         }
 
-        // Auto-Confetti on special milestones
-        setInterval(() => {
-            if(document.getElementById('world').style.display === 'block') {
-                confetti({ particleCount: 50, spread: 60, origin: { y: 0.8 }, colors: ['#ff2d55', '#ffffff'] });
-            }
-        }, 5000);
+        // Mouse Interactivity to rotate cube
+        let isDragging = false;
+        let startX, startY, rotateX = 0, rotateY = 0;
+
+        window.addEventListener('mousedown', (e) => { isDragging = true; startX = e.pageX; startY = e.pageY; });
+        window.addEventListener('mouseup', () => isDragging = false);
+        window.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            const cube = document.getElementById('cube');
+            cube.style.animation = "none";
+            const deltaX = e.pageX - startX;
+            const deltaY = e.pageY - startY;
+            rotateY += deltaX * 0.2;
+            rotateX -= deltaY * 0.2;
+            cube.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            startX = e.pageX; startY = e.pageY;
+        });
     </script>
 </body>
 </html>
