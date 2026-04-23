@@ -11,163 +11,126 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 
     <style>
-        :root {
-            --glass-bg: rgba(255, 255, 255, 0.15);
-            --glass-border: rgba(255, 255, 255, 0.2);
-        }
-
         body {
             margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
             color: white;
+            text-align: center;
             overflow-x: hidden;
         }
 
         .glass-panel {
-            background: var(--glass-bg);
+            background: rgba(255, 255, 255, 0.2);
             backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+            border-radius: 15px;
+            padding: 20px;
             margin: 20px auto;
-            max-width: 800px;
-            text-align: center;
+            width: 85%;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
-        /* Countdown Style */
-        .countdown {
-            display: flex;
-            justify-content: space-around;
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
+        .timer-box { display: flex; justify-content: space-around; font-size: 1.1rem; }
 
-        /* Interactive Letter */
-        .envelope {
+        .heart-btn {
             font-size: 5rem;
             cursor: pointer;
-            transition: transform 0.3s;
-        }
-        .envelope:hover {
-            transform: scale(1.1) rotate(5deg);
-        }
-
-        /* Memory Lane Styling */
-        .memory-lane {
-            padding: 50px 20px;
-        }
-        .memory-item {
-            margin-bottom: 40px;
-            padding: 20px;
-        }
-
-        /* Music Floating Button */
-        #music-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: white;
             color: #ff4b2b;
-            border: none;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            cursor: pointer;
-            z-index: 1000;
+            animation: pulse 1.5s infinite;
+            display: inline-block;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .memory-img {
+            width: 100%;
+            border-radius: 10px;
+            margin-top: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
     </style>
 </head>
 <body>
 
-    <section class="glass-panel animate__animated animate__fadeInDown" style="margin-top: 50px;">
-        <h1>আমাদের একসাথে চলার ৪ মাস ❤️</h1>
-        <div id="timer" class="countdown">
-            <div><span id="days">00</span><br><small>দিন</small></div>
-            <div><span id="hours">00</span><br><small>ঘণ্টা</small></div>
-            <div><span id="minutes">00</span><br><small>মিনিট</small></div>
-            <div><span id="seconds">00</span><br><small>সেকেন্ড</small></div>
+    <div class="glass-panel animate__animated animate__fadeInDown" style="margin-top: 30px;">
+        <h3>২৭ ডিসেম্বর ২০২৫ থেকে শুরু হওয়া গল্প... ❤️</h3>
+        <div id="timer" class="timer-box">
+            <div><span id="days">0</span><br><small>দিন</small></div>
+            <div><span id="hours">0</span><br><small>ঘণ্টা</small></div>
+            <div><span id="minutes">0</span><br><small>মিনিট</small></div>
+            <div><span id="seconds">0</span><br><small>সেকেন্ড</small></div>
         </div>
-    </section>
+    </div>
 
-    <section class="glass-panel" data-aos="zoom-in">
-        <h3>তোমার জন্য একটি চিঠি 💌</h3>
-        <div class="envelope" onclick="openLetter()">📩</div>
-        <p>চিঠিটি খুলতে ক্লিক করো</p>
-    </section>
+    <div class="glass-panel" data-aos="zoom-in">
+        <p>চিঠিটি পড়তে লাভ শেপ-এ ক্লিক করো ❤️</p>
+        <div class="heart-btn" onclick="startSurprise()">❤️</div>
+    </div>
 
-    <section class="memory-lane">
-        <h2 style="text-align: center;">স্মৃতির পাতা থেকে...</h2>
-        
-        <div class="glass-panel memory-item" data-aos="fade-right">
-            <h3>আমাদের শুরুটা যেখানে...</h3>
-            <p>এখানে আপনাদের প্রথম কথা বা কোনো বিশেষ স্মৃতি লিখুন।</p>
-        </div>
+    <div class="glass-panel" data-aos="fade-right">
+        <img src="1.jpg" class="memory-img">
+        <p>"আমাদের সেই প্রথম চ্যাট..."</p>
+    </div>
 
-        <div class="glass-panel memory-item" data-aos="fade-left">
-            <h3>প্রথম অনুভুতি</h3>
-            <p>আপনার প্রিয় কোনো মুহূর্তের বর্ণনা এখানে দিন।</p>
-        </div>
-    </section>
+    <div class="glass-panel" data-aos="fade-left">
+        <img src="2.jpg" class="memory-img">
+        <p>বেগুনি শাড়িতে তোমাকে পরীর মতো লাগে ✨</p>
+    </div>
 
-    <button id="music-btn" onclick="toggleMusic()">🎵</button>
-    <audio id="bg-music" loop>
-        <source src="your-music-link.mp3" type="audio/mpeg">
+    <div class="glass-panel" data-aos="zoom-in-up">
+        <img src="3.jpg" class="memory-img">
+        <p>এই হাসিটা সারাজীবন দেখতে চাই</p>
+    </div>
+
+    <div class="glass-panel" data-aos="flip-right">
+        <img src="4.jpg" class="memory-img">
+        <p>দূরে থাকলেও তুমি সবসময় হৃদয়ে</p>
+    </div>
+
+    <div class="glass-panel" data-aos="slide-up">
+        <img src="5.jpg" class="memory-img">
+        <p>মানিব্যাগ থেকে মন—সবখানেই তুমি ❤️</p>
+    </div>
+
+    <audio id="loveSong" loop>
+        <source src="song.mp3" type="audio/mpeg">
     </audio>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        AOS.init();
+        AOS.init({ duration: 1000 });
 
-        // 1. Countdown Logic (Set your Anniversary Date)
-        const anniversaryDate = new Date("2025-11-27T00:00:00").getTime(); // আপনার তারিখ দিন
-
+        // Countdown Logic
+        const startTime = new Date("2025-12-27T00:00:00").getTime();
         setInterval(() => {
             const now = new Date().getTime();
-            const diff = now - anniversaryDate;
-
+            const diff = now - startTime;
             document.getElementById('days').innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
             document.getElementById('hours').innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             document.getElementById('minutes').innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
             document.getElementById('seconds').innerText = Math.floor((diff % (1000 * 60)) / 1000);
         }, 1000);
 
-        // 2. Interactive Letter (SweetAlert2)
-        function openLetter() {
-            fireConfetti();
+        function startSurprise() {
+            // গান বাজানো শুরু
+            document.getElementById('loveSong').play();
+            
+            // হার্ট রেইন এনিমেশন
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+
+            // লাভ লেটার পপ-আপ
             Swal.fire({
-                title: 'প্রিয়তমা,',
-                text: 'এই ৪ মাসে তুমি আমার জীবনকে কতটা সুন্দর করে তুলেছ তা বলে বোঝানো সম্ভব নয়। দূরে থাকলেও তুমি সবসময় আমার হৃদয়ে আছো। শুভ ৪ মাস পূর্তি!',
-                imageUrl: 'https://cdn-icons-png.flaticon.com/512/3656/3656950.png',
-                imageWidth: 100,
-                confirmButtonText: 'অনেক ভালোবাসা ❤️',
-                background: 'rgba(255, 255, 255, 0.9)',
-                backdrop: `rgba(255, 75, 43, 0.3)`
+                title: 'প্রিয়তাহিয়া ❤️',
+                text: '২৭ ডিসেম্বর থেকে আজ পর্যন্ত প্রতিটি মুহূর্ত আমার জন্য উপহার। এভাবেই সারাজীবন পাশে থেকো। ভালোবাসি অনেক!',
+                confirmButtonText: 'অনেক ভালোবাসা! ❤️',
+                background: '#fff5f5',
+                color: '#e84393'
             });
-        }
-
-        // 3. Confetti Effect
-        function fireConfetti() {
-            confetti({
-                particleCount: 150,
-                spread: 70,
-                origin: { y: 0.6 },
-                colors: ['#ff4b2b', '#ff416c', '#ffffff']
-            });
-        }
-
-        // 4. Music Toggle
-        const music = document.getElementById('bg-music');
-        function toggleMusic() {
-            if (music.paused) {
-                music.play();
-                document.getElementById('music-btn').innerText = "⏸️";
-            } else {
-                music.pause();
-                document.getElementById('music-btn').innerText = "🎵";
-            }
         }
     </script>
 </body>
