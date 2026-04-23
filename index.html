@@ -2,197 +2,131 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Journey of Hearts ❤️</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infinity & Beyond ❤️</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 
     <style>
-        :root {
-            --primary-love: #ff758c;
-            --glass: rgba(255, 255, 255, 0.12);
+        :root { --glow: #ff2d55; }
+        body, html { margin: 0; padding: 0; height: 100%; background: #000; overflow: hidden; font-family: 'Poppins', sans-serif; }
+
+        /* Initial Portal */
+        #portal {
+            position: fixed; width: 100%; height: 100%; display: flex;
+            justify-content: center; align-items: center; z-index: 100;
+            background: radial-gradient(circle, #1a0505 0%, #000 100%);
+            cursor: pointer;
         }
 
-        body, html {
-            margin: 0; padding: 0; height: 100%;
-            font-family: 'Poppins', sans-serif;
-            background: #0b0b0b; color: white;
-            overflow: hidden;
+        .heart-core {
+            font-size: 80px; filter: drop-shadow(0 0 20px var(--glow));
+            animation: beat 1.2s infinite;
         }
 
-        /* Splash Screen */
-        #splash {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #12050c; z-index: 9999;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
+        @keyframes beat {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.3); opacity: 1; filter: drop-shadow(0 0 40px var(--glow)); }
         }
 
-        /* Background Setup */
-        .bg-image {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: url('bg.png') no-repeat center center/cover;
-            filter: blur(6px) brightness(0.4); z-index: 0; transform: scale(1.1);
+        /* 3D World Setup */
+        #world {
+            display: none; height: 100vh; width: 100vw; perspective: 1000px;
+            background: url('bg.png') no-repeat center/cover;
         }
 
-        .content {
-            position: relative; z-index: 10; height: 100%;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            padding: 20px; opacity: 0;
+        .scene {
+            width: 100%; height: 100%; position: relative;
+            transform-style: preserve-3d; transition: transform 0.1s ease-out;
         }
 
-        /* Premium Glass Card */
-        .glass-card {
-            background: var(--glass); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            border-radius: 30px; padding: 35px 25px; width: 85%; max-width: 380px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-            text-align: center;
+        /* Floating 3D Polaroids */
+        .card {
+            position: absolute; width: 220px; padding: 10px; background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px; transform-style: preserve-3d;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
         }
 
-        h2 {
-            font-family: 'Dancing Script', cursive; font-size: 2.2rem;
-            margin-bottom: 25px; color: #fff;
-            text-shadow: 0 0 10px rgba(255, 117, 140, 0.5);
-        }
+        .card img { width: 100%; border-radius: 10px; pointer-events: none; }
+        
+        .card-1 { top: 15%; left: 10%; transform: translateZ(100px) rotateY(10deg); }
+        .card-2 { top: 40%; right: 10%; transform: translateZ(250px) rotateY(-15deg); }
+        .card-3 { bottom: 15%; left: 20%; transform: translateZ(150px) rotateX(10deg); }
 
-        /* Modern Timer */
-        .timer-box { display: flex; justify-content: space-around; gap: 8px; margin-bottom: 30px; }
-        .t-unit { background: rgba(0,0,0,0.3); padding: 12px 5px; border-radius: 15px; flex: 1; border: 1px solid rgba(255,255,255,0.05); }
-        .t-unit span { display: block; font-size: 1.6rem; font-weight: 600; color: var(--primary-love); }
-        .t-unit small { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.7; }
-
-        /* Floating Button Style */
-        .magic-btn {
-            background: rgba(255, 255, 255, 0.95);
-            color: #ff4b2b; border: none; padding: 18px 35px;
-            font-size: 1.1rem; font-weight: 600; border-radius: 50px;
-            cursor: pointer; box-shadow: 0 10px 25px rgba(255, 117, 140, 0.3);
-            transition: 0.3s; display: flex; align-items: center; justify-content: center;
-            gap: 12px; margin: 0 auto; width: 100%;
-        }
-
-        .magic-btn:active { transform: scale(0.95); }
-
-        /* Polaroid Animation */
-        .p-stack { display: flex; justify-content: center; gap: 8px; margin-top: 15px; }
-        .p-img { 
-            width: 75px; height: 95px; background: #fff; padding: 5px 5px 15px; 
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2); transform: rotate(-5deg);
-        }
-        .p-img img { width: 100%; height: 70px; object-fit: cover; }
-
-        /* Floating Hearts */
-        .heart {
-            position: absolute; color: rgba(255, 117, 140, 0.4);
-            pointer-events: none; z-index: 1; animation: floatUp 5s linear infinite;
-        }
-        @keyframes floatUp {
-            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        .text-overlay {
+            position: absolute; bottom: -50px; width: 100%; text-align: center;
+            font-size: 1.2rem; color: white; text-shadow: 0 0 10px var(--glow);
+            font-style: italic; opacity: 0;
         }
     </style>
 </head>
 <body>
 
-    <div id="splash">
-        <div style="font-size: 3rem;">💖</div>
-        <p style="font-family: 'Dancing Script'; font-size: 1.5rem; color: #ff9a9e;">Our Story is Loading...</p>
+    <audio id="bgMusic" loop><source src="song.mp3" type="audio/mpeg"></audio>
+
+    <div id="portal" onclick="breakTheReality()">
+        <div class="heart-core">❤️</div>
+        <p style="position:absolute; bottom:20%; color:white; letter-spacing:3px; opacity:0.5;">TAP TO ENTER OUR UNIVERSE</p>
     </div>
 
-    <div class="bg-image"></div>
-
-    <div class="content" id="main">
-        <div class="glass-card" data-tilt>
-            <h2>My Dear Tahiya ❤️</h2>
-            
-            <div class="timer-box">
-                <div class="t-unit"><span id="d">0</span><small>Days</small></div>
-                <div class="t-unit"><span id="h">0</span><small>Hours</small></div>
-                <div class="t-unit"><span id="m">0</span><small>Mins</small></div>
-                <div class="t-unit"><span id="s">0</span><small>Secs</small></div>
-            </div>
-
-            <p style="font-size: 0.9rem; margin-bottom: 20px; opacity: 0.9;">Since December 27, 2025</p>
-
-            <button class="magic-btn" onclick="revealAll()">
-                <span>💌 Click for Surprise</span>
-            </button>
+    <div id="world">
+        <div class="scene" id="scene">
+            <div class="card card-1"><img src="1.jpg"><div class="text-overlay">Forever...</div></div>
+            <div class="card card-2"><img src="2.jpg"><div class="text-overlay">To the Moon...</div></div>
+            <div class="card card-3"><img src="3.jpg"><div class="text-overlay">And Back ❤️</div></div>
         </div>
     </div>
 
-    <audio id="music" loop>
-        <source src="song.mp3" type="audio/mpeg">
-    </audio>
-
     <script>
-        // 1. Splash Screen & Reveal
-        window.onload = () => {
-            gsap.to("#splash", { opacity: 0, duration: 1, delay: 1.5, onComplete: () => {
-                document.getElementById('splash').style.display = 'none';
-                gsap.to("#main", { opacity: 1, y: 0, duration: 1 });
+        const scene = document.getElementById('scene');
+        const bgMusic = document.getElementById('bgMusic');
+
+        function breakTheReality() {
+            bgMusic.play();
+            
+            // GSAP Explosion Animation
+            gsap.to(".heart-core", { scale: 50, opacity: 0, duration: 1, ease: "power4.in" });
+            gsap.to("#portal", { opacity: 0, duration: 1.2, delay: 0.2, onComplete: () => {
+                document.getElementById('portal').style.display = 'none';
+                document.getElementById('world').style.display = 'block';
+                startWorld();
             }});
-            createHearts();
-        };
-
-        // 2. Precise Countdown
-        const start = new Date("2025-12-27T00:00:00").getTime();
-        setInterval(() => {
-            const now = new Date().getTime();
-            const diff = Math.abs(now - start);
-            document.getElementById('d').innerText = Math.floor(diff / (86400000));
-            document.getElementById('h').innerText = Math.floor((diff % 86400000) / 3600000);
-            document.getElementById('m').innerText = Math.floor((diff % 3600000) / 60000);
-            document.getElementById('s').innerText = Math.floor((diff % 60000) / 1000);
-        }, 1000);
-
-        // 3. Floating Hearts Effect
-        function createHearts() {
-            setInterval(() => {
-                const h = document.createElement('div');
-                h.className = 'heart';
-                h.innerHTML = '❤️';
-                h.style.left = Math.random() * 100 + 'vw';
-                h.style.fontSize = (Math.random() * 20 + 10) + 'px';
-                h.style.animationDuration = (Math.random() * 3 + 3) + 's';
-                document.body.appendChild(h);
-                setTimeout(() => h.remove(), 5000);
-            }, 600);
         }
 
-        // 4. The Reveal Function
-        function revealAll() {
-            const audio = document.getElementById('music');
-            audio.play().catch(() => {}); // Play music
-
-            // Celebration
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-
-            Swal.fire({
-                title: '<span style="font-family: \'Dancing Script\'; font-size: 2.2rem; color: #ff4b2b;">To My Favorite Person,</span>',
-                html: `
-                    <div style="font-family: 'Poppins'; text-align: center; color: #444;">
-                        Every single day with you is a gift. <br> 
-                        <b>4 Months down, a lifetime to go!</b>
-                        
-                        <div class="p-stack">
-                            <div class="p-img"><img src="1.jpg"></div>
-                            <div class="p-img" style="transform: rotate(5deg);"><img src="2.jpg"></div>
-                            <div class="p-img" style="transform: rotate(-2deg);"><img src="3.jpg"></div>
-                        </div>
-                        <br>
-                        <p style="font-style: italic; font-size: 0.9rem;">"You're the best thing that ever happened to me."</p>
-                    </div>
-                `,
-                confirmButtonText: 'I Love You! ❤️',
-                confirmButtonColor: '#ff758c',
-                background: '#fff0f3',
-                showClass: { popup: 'animate__animated animate__zoomIn' }
+        function startWorld() {
+            // Reveal cards one by one with glitch effect
+            gsap.from(".card", { 
+                scale: 0, opacity: 0, stagger: 0.5, duration: 1.5, 
+                ease: "elastic.out(1, 0.5)", onComplete: () => {
+                    gsap.to(".text-overlay", { opacity: 1, bottom: "10px", duration: 1 });
+                }
             });
+
+            // Gyroscope / Mouse Move effect
+            window.addEventListener('mousemove', (e) => {
+                let x = (window.innerWidth / 2 - e.pageX) / 20;
+                let y = (window.innerHeight / 2 - e.pageY) / 20;
+                scene.style.transform = `rotateY(${x}deg) rotateX(${-y}deg)`;
+            });
+
+            // Mobile Device Orientation
+            if (window.DeviceOrientationEvent) {
+                window.addEventListener('deviceorientation', (e) => {
+                    let x = e.gamma / 2; // Left to Right
+                    let y = e.beta / 2;  // Front to Back
+                    scene.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
+                });
+            }
         }
+
+        // Auto-Confetti on special milestones
+        setInterval(() => {
+            if(document.getElementById('world').style.display === 'block') {
+                confetti({ particleCount: 50, spread: 60, origin: { y: 0.8 }, colors: ['#ff2d55', '#ffffff'] });
+            }
+        }, 5000);
     </script>
 </body>
 </html>
