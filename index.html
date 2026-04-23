@@ -1,1 +1,174 @@
-indes
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>আমাদের ৪ মাস ❤️</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+            margin: 20px auto;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        /* Countdown Style */
+        .countdown {
+            display: flex;
+            justify-content: space-around;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        /* Interactive Letter */
+        .envelope {
+            font-size: 5rem;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .envelope:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        /* Memory Lane Styling */
+        .memory-lane {
+            padding: 50px 20px;
+        }
+        .memory-item {
+            margin-bottom: 40px;
+            padding: 20px;
+        }
+
+        /* Music Floating Button */
+        #music-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            color: #ff4b2b;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+
+    <section class="glass-panel animate__animated animate__fadeInDown" style="margin-top: 50px;">
+        <h1>আমাদের একসাথে চলার ৪ মাস ❤️</h1>
+        <div id="timer" class="countdown">
+            <div><span id="days">00</span><br><small>দিন</small></div>
+            <div><span id="hours">00</span><br><small>ঘণ্টা</small></div>
+            <div><span id="minutes">00</span><br><small>মিনিট</small></div>
+            <div><span id="seconds">00</span><br><small>সেকেন্ড</small></div>
+        </div>
+    </section>
+
+    <section class="glass-panel" data-aos="zoom-in">
+        <h3>তোমার জন্য একটি চিঠি 💌</h3>
+        <div class="envelope" onclick="openLetter()">📩</div>
+        <p>চিঠিটি খুলতে ক্লিক করো</p>
+    </section>
+
+    <section class="memory-lane">
+        <h2 style="text-align: center;">স্মৃতির পাতা থেকে...</h2>
+        
+        <div class="glass-panel memory-item" data-aos="fade-right">
+            <h3>আমাদের শুরুটা যেখানে...</h3>
+            <p>এখানে আপনাদের প্রথম কথা বা কোনো বিশেষ স্মৃতি লিখুন।</p>
+        </div>
+
+        <div class="glass-panel memory-item" data-aos="fade-left">
+            <h3>প্রথম অনুভুতি</h3>
+            <p>আপনার প্রিয় কোনো মুহূর্তের বর্ণনা এখানে দিন।</p>
+        </div>
+    </section>
+
+    <button id="music-btn" onclick="toggleMusic()">🎵</button>
+    <audio id="bg-music" loop>
+        <source src="your-music-link.mp3" type="audio/mpeg">
+    </audio>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+
+        // 1. Countdown Logic (Set your Anniversary Date)
+        const anniversaryDate = new Date("2025-11-27T00:00:00").getTime(); // আপনার তারিখ দিন
+
+        setInterval(() => {
+            const now = new Date().getTime();
+            const diff = now - anniversaryDate;
+
+            document.getElementById('days').innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
+            document.getElementById('hours').innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            document.getElementById('minutes').innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            document.getElementById('seconds').innerText = Math.floor((diff % (1000 * 60)) / 1000);
+        }, 1000);
+
+        // 2. Interactive Letter (SweetAlert2)
+        function openLetter() {
+            fireConfetti();
+            Swal.fire({
+                title: 'প্রিয়তমা,',
+                text: 'এই ৪ মাসে তুমি আমার জীবনকে কতটা সুন্দর করে তুলেছ তা বলে বোঝানো সম্ভব নয়। দূরে থাকলেও তুমি সবসময় আমার হৃদয়ে আছো। শুভ ৪ মাস পূর্তি!',
+                imageUrl: 'https://cdn-icons-png.flaticon.com/512/3656/3656950.png',
+                imageWidth: 100,
+                confirmButtonText: 'অনেক ভালোবাসা ❤️',
+                background: 'rgba(255, 255, 255, 0.9)',
+                backdrop: `rgba(255, 75, 43, 0.3)`
+            });
+        }
+
+        // 3. Confetti Effect
+        function fireConfetti() {
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ff4b2b', '#ff416c', '#ffffff']
+            });
+        }
+
+        // 4. Music Toggle
+        const music = document.getElementById('bg-music');
+        function toggleMusic() {
+            if (music.paused) {
+                music.play();
+                document.getElementById('music-btn').innerText = "⏸️";
+            } else {
+                music.pause();
+                document.getElementById('music-btn').innerText = "🎵";
+            }
+        }
+    </script>
+</body>
+</html>
