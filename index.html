@@ -3,191 +3,166 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tahiya & Junaid | Eternal Memories</title>
+    <title>Tahiya & Junaid | Journey ❤️</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Orbitron:wght@400;700&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Orbitron:wght@500&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
         :root {
-            --neon-pink: #ff2d75;
-            --glass: rgba(255, 255, 255, 0.1);
+            --neon: #ff2d55;
+            --glass: rgba(255, 255, 255, 0.05);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
-            background: #050505; color: white; 
-            font-family: 'Poppins', sans-serif; overflow-x: hidden;
+            background: #050505; color: white; overflow: hidden;
+            font-family: 'Poppins', sans-serif;
         }
 
-        /* 1. Entrance Interface */
+        /* Cinematic Entrance */
         #entrance {
             position: fixed; inset: 0; z-index: 100;
-            background: radial-gradient(circle, #1a0a1a 0%, #000 100%);
+            background: radial-gradient(circle, #1a0a0f 0%, #000 100%);
             display: flex; flex-direction: column; justify-content: center; align-items: center;
         }
 
-        .heart-portal {
-            width: 120px; height: 120px; background: var(--neon-pink);
-            clip-path: path('M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.06 3.06 6.06 12 14.194 8.94-8.134 12-10.134 12-14.194 0-8.165-10.011-8.967-12-3.568z');
-            transform: scale(3.5); filter: drop-shadow(0 0 20px var(--neon-pink));
-            cursor: pointer; animation: pulse 2s infinite; transition: 0.5s;
+        .heart-pulse {
+            font-size: 5rem; cursor: pointer;
+            filter: drop-shadow(0 0 20px var(--neon));
+            animation: pulse 1.5s infinite;
         }
+
+        /* Floating Gallery */
+        #gallery {
+            height: 100vh; position: relative; display: none;
+            perspective: 1000px; overflow: hidden;
+        }
+
+        .polaroid {
+            position: absolute; width: 180px; background: white; padding: 10px 10px 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); cursor: pointer;
+            transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 5;
+        }
+
+        .polaroid img { width: 100%; height: 200px; object-fit: cover; }
+
+        /* Caption Overlay */
+        #caption-box {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0);
+            width: 90%; max-width: 400px; background: rgba(0,0,0,0.9);
+            border: 1px solid var(--neon); border-radius: 20px; padding: 20px;
+            z-index: 50; text-align: center; pointer-events: none;
+        }
+
+        /* Unique Cyber Timer */
+        #timer-container {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 500px; background: var(--glass);
+            backdrop-filter: blur(15px); border-radius: 100px;
+            padding: 15px 25px; border: 1px solid rgba(255,45,85,0.3);
+            display: flex; justify-content: space-around; align-items: center;
+            box-shadow: 0 0 30px rgba(255,45,85,0.1); z-index: 20;
+        }
+
+        .t-unit { text-align: center; }
+        .t-num { 
+            display: block; font-family: 'Orbitron', sans-serif; 
+            font-size: 1.4rem; color: var(--neon); text-shadow: 0 0 10px var(--neon);
+        }
+        .t-lab { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 2px; opacity: 0.6; }
 
         @keyframes pulse {
-            0% { transform: scale(3.5); opacity: 0.8; }
-            50% { transform: scale(3.8); opacity: 1; }
-            100% { transform: scale(3.5); opacity: 0.8; }
-        }
-
-        /* 2. Cinematic Background */
-        .stars {
-            position: fixed; width: 100%; height: 100%; top: 0; left: 0;
-            background: url('https://www.transparenttextures.com/patterns/stardust.png');
-            opacity: 0.3; pointer-events: none;
-        }
-
-        /* 3. Memory Gallery */
-        .story-container { padding: 100px 20px 150px; }
-        .memory-card {
-            max-width: 350px; margin: 80px auto; position: relative;
-            cursor: pointer; opacity: 0; transform: translateY(100px);
-        }
-
-        .memory-card img {
-            width: 100%; border-radius: 20px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.8);
-            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .memory-card:hover img { transform: scale(1.05) rotate(2deg); }
-        .tap-hint {
-            position: absolute; bottom: -30px; left: 50%; transform: translateX(-50%);
-            font-size: 0.8rem; color: var(--neon-pink); letter-spacing: 2px;
-        }
-
-        /* 4. Unique Bottom Timer (Fixed HUD) */
-        .unique-timer-hud {
-            position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(15px);
-            border: 1px solid var(--neon-pink); border-radius: 100px;
-            padding: 12px 30px; width: 90%; max-width: 450px;
-            display: flex; justify-content: space-around; align-items: center;
-            box-shadow: 0 0 30px rgba(255, 45, 117, 0.3); z-index: 50;
-        }
-
-        .timer-unit { text-align: center; }
-        .timer-unit span {
-            display: block; font-family: 'Orbitron', sans-serif;
-            font-size: 1.2rem; color: #fff; text-shadow: 0 0 10px var(--neon-pink);
-        }
-        .timer-unit small { font-size: 0.6rem; text-transform: uppercase; opacity: 0.7; }
-
-        /* Captions Overlay */
-        .caption-overlay {
-            font-family: 'Dancing Script', cursive; font-size: 1.8rem;
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
         }
     </style>
 </head>
 <body>
 
-    <div id="entrance" onclick="enterExperience()">
-        <div class="heart-portal"></div>
-        <p style="margin-top: 50px; letter-spacing: 3px; font-weight: 300;">TAP THE HEART TO ENTER</p>
+    <div id="entrance">
+        <div class="heart-pulse" onclick="unlock()">❤️</div>
+        <p style="margin-top: 20px; font-family: 'Dancing Script'; font-size: 1.5rem;">Click to Enter Our World</p>
     </div>
 
-    <div class="stars"></div>
-
-    <div class="story-container">
-        <h1 style="text-align: center; font-family: 'Dancing Script'; font-size: 3rem; margin-bottom: 50px; color: var(--neon-pink);">Our Memory Lane</h1>
-
-        <div class="memory-card" onclick="showCaption(1)">
-            <img src="1.jpg" alt="Memory 1">
-            <div class="tap-hint">TAP TO SEE MEMORY •</div>
+    <div id="gallery">
         </div>
 
-        <div class="memory-card" onclick="showCaption(2)">
-            <img src="2.jpg" alt="Memory 2">
-            <div class="tap-hint">TAP TO SEE MEMORY •</div>
-        </div>
-
-        <div class="memory-card" onclick="showCaption(3)">
-            <img src="3.jpg" alt="Memory 3">
-            <div class="tap-hint">TAP TO SEE MEMORY •</div>
-        </div>
+    <div id="caption-box">
+        <h2 id="cap-text" style="font-family: 'Dancing Script'; color: var(--neon); font-size: 1.8rem;"></h2>
     </div>
 
-    <div class="unique-timer-hud">
-        <div class="timer-unit"><span id="d">0</span><small>Days</small></div>
-        <div class="timer-unit"><span id="h">0</span><small>Hrs</small></div>
-        <div class="timer-unit"><span id="m">0</span><small>Mins</small></div>
-        <div class="timer-unit"><span id="s">0</span><small>Secs</small></div>
+    <div id="timer-container">
+        <div class="t-unit"><span class="t-num" id="d">00</span><span class="t-lab">Days</span></div>
+        <div class="t-unit"><span class="t-num" id="h">00</span><span class="t-lab">Hrs</span></div>
+        <div class="t-unit"><span class="t-num" id="m">00</span><span class="t-lab">Min</span></div>
+        <div class="t-unit"><span class="t-num" id="s">00</span><span class="t-lab">Sec</span></div>
     </div>
 
     <audio id="bgMusic" loop><source src="song.mp3" type="audio/mpeg"></audio>
 
     <script>
-        gsap.registerPlugin(ScrollTrigger);
+        const photos = [
+            { src: 'image_1.png', cap: 'যেদিন প্রথম কথা হয়েছিল... ❤️' },
+            { src: 'image_2.png', cap: 'তোমার ঐ মিষ্টি হাসিটা... ✨' },
+            { src: 'image_3.png', cap: 'সবচেয়ে প্রিয় মুহূর্ত আমাদের!' }
+        ];
 
-        // 1. Entrance Logic
-        function enterExperience() {
-            const music = document.getElementById('bgMusic');
-            music.play().catch(() => {});
+        function unlock() {
+            document.getElementById('bgMusic').play();
+            gsap.to("#entrance", { opacity: 0, duration: 1.5, onComplete: () => {
+                document.getElementById('entrance').style.display = 'none';
+                document.getElementById('gallery').style.display = 'block';
+                spawnPhotos();
+            }});
+        }
 
-            gsap.to("#entrance", {
-                opacity: 0, scale: 2, duration: 1.5, ease: "power4.in",
-                onComplete: () => {
-                    document.getElementById('entrance').style.display = 'none';
-                    startAnimations();
-                }
+        function spawnPhotos() {
+            const gallery = document.getElementById('gallery');
+            photos.forEach((p, i) => {
+                const div = document.createElement('div');
+                div.className = 'polaroid';
+                div.innerHTML = `<img src="${p.src}">`;
+                
+                // Random position
+                div.style.left = (Math.random() * 60 + 10) + '%';
+                div.style.top = (Math.random() * 50 + 10) + '%';
+                div.style.transform = `rotate(${Math.random() * 40 - 20}deg)`;
+
+                div.onclick = () => showCaption(p.cap, div);
+                gallery.appendChild(div);
+                
+                gsap.from(div, { scale: 0, rotation: 100, duration: 1, delay: i * 0.3 });
             });
         }
 
-        // 2. Scroll Animations
-        function startAnimations() {
-            gsap.utils.toArray(".memory-card").forEach(card => {
-                gsap.to(card, {
-                    scrollTrigger: {
-                        trigger: card,
-                        start: "top 85%",
-                    },
-                    opacity: 1, y: 0, duration: 1.5, ease: "expo.out"
-                });
-            });
+        function showCaption(text, element) {
+            const capBox = document.getElementById('caption-box');
+            const capText = document.getElementById('cap-text');
+            
+            capText.innerText = text;
+            
+            // Zoom Effect
+            gsap.to(element, { zIndex: 100, scale: 1.5, top: '40%', left: '50%', xPercent: -50, rotation: 0, duration: 0.8 });
+            gsap.to(capBox, { scale: 1, y: 100, duration: 0.5, delay: 0.3 });
+
+            setTimeout(() => {
+                gsap.to(element, { scale: 1, top: (Math.random() * 50 + 10) + '%', left: (Math.random() * 60 + 10) + '%', rotation: Math.random() * 40 - 20, zIndex: 5, duration: 0.8 });
+                gsap.to(capBox, { scale: 0, duration: 0.3 });
+            }, 3000);
         }
 
-        // 3. Image Captions with SweetAlert
-        const captions = {
-            1: "The moment that changed everything! ❤️",
-            2: "I love the way you smile when you're with me.",
-            3: "Every day with you is a new favorite memory."
-        };
-
-        function showCaption(id) {
-            Swal.fire({
-                imageUrl: `${id}.jpg`,
-                imageWidth: 300,
-                title: `<span class="caption-overlay">${captions[id]}</span>`,
-                background: '#000',
-                color: '#fff',
-                showConfirmButton: false,
-                timer: 4000,
-                showClass: { popup: 'animate__animated animate__zoomIn' },
-                hideClass: { popup: 'animate__animated animate__fadeOut' }
-            });
-        }
-
-        // 4. Futuristic Timer Logic
+        // Timer Logic (Dec 27, 2025)
         const start = new Date("2025-12-27T00:00:00").getTime();
         setInterval(() => {
-            const diff = Math.abs(new Date().getTime() - start);
-            document.getElementById('d').innerText = Math.floor(diff / 86400000);
-            document.getElementById('h').innerText = Math.floor((diff % 86400000) / 3600000);
-            document.getElementById('m').innerText = Math.floor((diff % 3600000) / 60000);
-            document.getElementById('s').innerText = Math.floor((diff % 60000) / 1000);
+            const now = new Date().getTime();
+            const diff = Math.abs(now - start);
+            document.getElementById('d').innerText = Math.floor(diff / 86400000).toString().padStart(2, '0');
+            document.getElementById('h').innerText = Math.floor((diff % 86400000) / 3600000).toString().padStart(2, '0');
+            document.getElementById('m').innerText = Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0');
+            document.getElementById('s').innerText = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
         }, 1000);
     </script>
 </body>
