@@ -1,26 +1,32 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>আমাদের গল্প ❤️</title>
+    <title>Our Forever Journey ❤️</title>
     
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 
     <style>
+        :root {
+            --primary-love: #ff758c;
+            --glass: rgba(255, 255, 255, 0.12);
+        }
+
         body, html {
             margin: 0;
             padding: 0;
             height: 100%;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Poppins', sans-serif;
             color: white;
             text-align: center;
-            overflow: hidden; /* স্ক্রল বন্ধ রাখা হয়েছে যাতে এক পেজেই সব সুন্দর দেখায় */
+            overflow: hidden;
         }
 
-        /* ঝাপসা ব্যাকগ্রাউন্ড */
+        /* Deep Blurry Background */
         .bg-image {
             position: fixed;
             top: 0;
@@ -28,136 +34,204 @@
             width: 100%;
             height: 100%;
             background: url('bg.png') no-repeat center center/cover;
-            filter: blur(6px) brightness(0.6); /* হালকা ঝাপসা এবং একটু অন্ধকার যাতে লেখা স্পষ্ট বোঝা যায় */
-            transform: scale(1.1); /* সাইডের সাদা বর্ডার ঢাকতে */
+            filter: blur(8px) brightness(0.5);
+            transform: scale(1.1);
             z-index: -1;
         }
 
-        /* মূল কন্টেন্ট সাজানো */
+        /* Floating Particles Overlay */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, transparent 20%, rgba(0,0,0,0.4) 100%);
+            z-index: 0;
+        }
+
         .content {
             position: relative;
-            z-index: 1;
+            z-index: 10;
             height: 100%;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             padding: 20px;
-            box-sizing: border-box;
         }
 
-        /* গ্লাস প্যানেল (স্বচ্ছ বক্স) */
+        /* Aesthetic Glass Panel */
         .glass-panel {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(12px);
-            border-radius: 20px;
-            padding: 25px;
-            margin: 15px 0;
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 24px;
+            padding: 30px;
             width: 90%;
-            max-width: 400px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            max-width: 420px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            margin-bottom: 20px;
         }
 
-        h3 { margin-top: 0; font-size: 1.3rem; text-shadow: 1px 1px 4px rgba(0,0,0,0.5); }
+        h2 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #fff, #ff9a9e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-        /* টাইমার ডিজাইন */
-        .timer-box { display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: bold; }
-        .timer-item { background: rgba(0,0,0,0.4); padding: 10px; border-radius: 10px; width: 22%; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); }
-        .timer-item span { font-size: 1.6rem; color: #ff9a9e; }
-        .timer-item small { font-size: 0.8rem; font-weight: normal; color: #ddd;}
+        /* Premium Timer */
+        .timer-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
 
-        /* চিঠির বাটন ডিজাইন */
-        .letter-btn {
-            background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
-            color: white;
+        .timer-unit {
+            flex: 1;
+            padding: 10px 5px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .timer-unit span {
+            display: block;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--primary-love);
+        }
+
+        .timer-unit small {
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.65rem;
+            opacity: 0.8;
+        }
+
+        /* Fancy Letter Button */
+        .main-btn {
+            background: rgba(255, 255, 255, 0.9);
+            color: #ff4b2b;
             border: none;
-            padding: 15px 30px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            border-radius: 30px;
+            padding: 18px 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(255, 117, 140, 0.5);
-            animation: pulse 2s infinite;
-            transition: transform 0.3s;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            transition: all 0.4s ease;
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin: 15px auto 0;
+            gap: 12px;
+            margin-top: 10px;
         }
 
-        .letter-btn:active { transform: scale(0.95); }
+        .main-btn:hover {
+            transform: translateY(-5px);
+            background: #fff;
+            box-shadow: 0 15px 25px rgba(255, 117, 140, 0.4);
+        }
 
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(255, 117, 140, 0.7); }
-            70% { box-shadow: 0 0 0 15px rgba(255, 117, 140, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 117, 140, 0); }
+        /* Floating Hearts Animation */
+        .floating-heart {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.3);
+            pointer-events: none;
+            animation: float 6s linear infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
         }
     </style>
 </head>
 <body>
 
     <div class="bg-image"></div>
+    <div class="overlay"></div>
 
     <div class="content">
-        
         <div class="glass-panel animate__animated animate__fadeInDown">
-            <h3>২৭ ডিসেম্বর থেকে শুরু হওয়া গল্প... ❤️</h3>
-            <div id="timer" class="timer-box">
-                <div class="timer-item"><span id="days">0</span><br><small>দিন</small></div>
-                <div class="timer-item"><span id="hours">0</span><br><small>ঘণ্টা</small></div>
-                <div class="timer-item"><span id="minutes">0</span><br><small>মিনিট</small></div>
-                <div class="timer-item"><span id="seconds">0</span><br><small>সেকেন্ড</small></div>
+            <h2>Our Love Story Began...</h2>
+            <div class="timer-container" id="timer">
+                <div class="timer-unit"><span id="days">0</span><small>Days</small></div>
+                <div class="timer-unit"><span id="hours">0</span><small>Hrs</small></div>
+                <div class="timer-unit"><span id="mins">0</span><small>Mins</small></div>
+                <div class="timer-unit"><span id="secs">0</span><small>Secs</small></div>
             </div>
         </div>
 
-        <div class="glass-panel animate__animated animate__fadeInUp animate__delay-1s">
-            <p style="margin-bottom: 10px; font-size: 1.1rem; text-shadow: 1px 1px 3px rgba(0,0,0,0.5);">তোমার জন্য একটি বিশেষ বার্তা আছে 💌</p>
-            <button class="letter-btn" onclick="openLetter()">
-                📩 চিঠিটি খুলুন
+        <div class="glass-panel animate__animated animate__fadeInUp">
+            <p style="margin-top:0; opacity: 0.9;">A special message is waiting for you...</p>
+            <button class="main-btn" onclick="openSurprise()">
+                <span>💌 Open Your Letter</span>
             </button>
         </div>
-
     </div>
 
-    <audio id="loveSong" loop>
+    <audio id="bgMusic" loop>
         <source src="song.mp3" type="audio/mpeg">
     </audio>
 
     <script>
-        // টাইমারের হিসাব (২৭ ডিসেম্বর ২০২৫)
-        const startTime = new Date("2025-12-27T00:00:00").getTime();
-        setInterval(() => {
+        // Create Floating Hearts in Background
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('floating-heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 3 + 4 + 's';
+            heart.style.fontSize = Math.random() * 20 + 10 + 'px';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 6000);
+        }
+        setInterval(createHeart, 800);
+
+        // Precise Countdown (December 27, 2025)
+        const journeyStart = new Date("2025-12-27T00:00:00").getTime();
+        
+        function updateTimer() {
             const now = new Date().getTime();
-            const diff = Math.abs(now - startTime); // Math.abs দেওয়া হয়েছে যাতে নেগেটিভ সময় না দেখায়
+            const diff = Math.abs(now - journeyStart);
+            
             document.getElementById('days').innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
             document.getElementById('hours').innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            document.getElementById('minutes').innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            document.getElementById('seconds').innerText = Math.floor((diff % (1000 * 60)) / 1000);
-        }, 1000);
+            document.getElementById('mins').innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            document.getElementById('secs').innerText = Math.floor((diff % (1000 * 60)) / 1000);
+        }
+        setInterval(updateTimer, 1000);
 
-        function openLetter() {
-            // গান বাজানো শুরু
-            document.getElementById('loveSong').play();
+        function openSurprise() {
+            const music = document.getElementById('bgMusic');
+            music.play();
             
-            // লাভ রেইন অ্যানিমেশন
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ff758c', '#ff7eb3', '#ffffff']
+            });
 
-            // কাস্টম চিঠি (SweetAlert)
             Swal.fire({
-                title: 'আমার প্রিয় তাহিয়া ❤️',
+                title: '<span style="font-family: \'Dancing Script\', cursive; font-size: 2rem;">My Dear Tahiya,</span>',
                 html: `
-                    <div style="text-align: left; font-size: 1.1rem; line-height: 1.6; color: #4a4a4a; padding: 10px;">
-                        ২৭ ডিসেম্বর থেকে আজ পর্যন্ত প্রতিটি মুহূর্ত আমার জন্য সেরা উপহার।<br><br>
-                        তুমি দূরে থাকলেও আমার মনের সবচেয়ে কাছে আছো। মানিব্যাগ থেকে মন—সবখানেই শুধু তুমি। এভাবেই সারাজীবন আমার পাশে থেকো।<br><br>
-                        <b>ভালোবাসি অনেক!</b>
+                    <div style="text-align: center; font-family: 'Poppins', sans-serif; line-height: 1.8; color: #555;">
+                        Every single moment since <b>December 27</b> has been a blessing. <br><br>
+                        Distance may keep us apart, but you're always in my heart. From my wallet to my soul—it's always been you. <br><br>
+                        Happy 4 Months of togetherness! <b>I love you endlessly. ❤️</b>
                     </div>
                 `,
-                confirmButtonText: 'অনেক ভালোবাসা! ❤️',
+                confirmButtonText: 'I Love You Too! ❤️',
                 confirmButtonColor: '#ff758c',
                 background: '#fff0f3',
-                backdrop: `rgba(0,0,0,0.7)` // চিঠির পেছনের ব্যাকগ্রাউন্ড আরও একটু ডার্ক করবে
+                showClass: { popup: 'animate__animated animate__zoomIn' },
+                hideClass: { popup: 'animate__animated animate__fadeOutOut' }
             });
         }
     </script>
