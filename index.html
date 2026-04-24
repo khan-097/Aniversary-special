@@ -410,6 +410,40 @@ section { min-height:100vh; padding:5rem 1.5rem; display:flex; flex-direction:co
   display: none;
   animation: fadeUp .3s ease;
 }
+/* ══ FIRST CHAT ══ */
+#firstchat { background: radial-gradient(ellipse at center, #200d13, #0a0508 70%); }
+.chat-img-wrap { display:flex; flex-direction:column; align-items:center; gap:1.5rem; }
+.chat-phone-frame {
+  width: min(280px, 78vw);
+  background: #1a1a1a;
+  border-radius: 20px;
+  border: 1px solid rgba(201,169,110,.3);
+  box-shadow:
+    0 20px 60px rgba(0,0,0,.7),
+    0 0 0 6px #111,
+    0 0 0 7px rgba(201,169,110,.2);
+  overflow: hidden;
+}
+.chat-phone-top {
+  background: #111;
+  padding: .6rem;
+  display: flex;
+  justify-content: center;
+  gap: .4rem;
+}
+.chat-phone-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #333;
+}
+.chat-caption {
+  font-family: 'Cormorant', serif;
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--blush);
+  opacity: .8;
+  text-align: center;
+}
 </style>
 </head>
 <body>
@@ -441,6 +475,7 @@ section { min-height:100vh; padding:5rem 1.5rem; display:flex; flex-direction:co
 
   <nav class="nav-dots">
     <button class="ndot on"></button>
+    <button class="ndot"></button>
     <button class="ndot"></button>
     <button class="ndot"></button>
     <button class="ndot"></button>
@@ -534,6 +569,24 @@ section { min-height:100vh; padding:5rem 1.5rem; display:flex; flex-direction:co
       <div class="lp-sig">Forever yours 🌹</div>
     </div>
   </section>
+  
+  <section id="firstchat">
+  <p class="tag">Where It All Began</p>
+  <h2 class="h2">Our First Conversation</h2>
+  <div class="divider"></div>
+  <div class="chat-img-wrap reveal">
+    <div class="chat-phone-frame">
+      <div class="chat-phone-top">
+        <span class="chat-phone-dot"></span>
+        <span class="chat-phone-dot"></span>
+        <span class="chat-phone-dot"></span>
+      </div>
+      <img src="chat.png" alt="Our first conversation"
+        style="width:100%;display:block;border-radius:0 0 18px 18px;">
+    </div>
+    <p class="chat-caption">এই মুহূর্ত থেকেই শুরু হয়েছিল সব কিছু... 🌹</p>
+  </div>
+</section>
 
   <!-- FINAL -->
   <section id="final">
@@ -613,7 +666,7 @@ function prevSlide(){ goSlide(cur-1); }
 setInterval(nextSlide,4500);
 
 // ── nav dots
-const sections=['hero','gallery','letter','final'];
+const sections=['hero','gallery','letter','final','firstchat'];
 document.querySelectorAll('.ndot').forEach((btn,i)=>btn.addEventListener('click',()=>document.getElementById(sections[i])?.scrollIntoView({behavior:'smooth'})));
 
 // ── scroll reveal + active dot
