@@ -286,19 +286,161 @@ section { min-height:100vh; padding:5rem 1.5rem; display:flex; flex-direction:co
 .s-dot  { width:7px; height:7px; border-radius:50%; background:rgba(201,169,110,.25); cursor:pointer; transition:all .35s; border:none; }
 .s-dot.on { background:var(--gold); width:22px; border-radius:4px; box-shadow:0 0 8px rgba(201,169,110,.6); }
 
-/* ══ LETTER ══ */
-#letter { background: radial-gradient(ellipse at center, #1a0810, #0e0a0b 70%); }
-.letter-paper {
-  background: var(--cream); color: #2a1418;
-  max-width: 560px; width: 100%; padding: 3.5rem 3rem;
+/* ══ LETTER CINEMATIC ══ */
+#letter { background: radial-gradient(ellipse at center, #1a0810, #0a0508 70%); }
+
+.letter-scene {
   position: relative;
-  box-shadow: 0 30px 80px rgba(0,0,0,.7), 0 0 0 1px rgba(201,169,110,.2), inset 0 0 0 1px rgba(201,169,110,.1);
+  max-width: 560px; width: 100%;
+  display: flex; flex-direction: column; align-items: center;
 }
-.letter-paper::before { content:''; position:absolute; inset:14px; border:1px solid rgba(194,84,91,.12); pointer-events:none; }
-.lp-rose { font-size:2rem; text-align:center; display:block; margin-bottom:1.4rem; }
-.lp-open { font-family:'Playfair Display',serif; font-style:italic; font-size:clamp(1.1rem,3vw,1.35rem); color:var(--deep); display:block; margin-bottom:1.5rem; }
-.letter-paper p { font-family:'Cormorant',serif; font-size:clamp(1rem,2.5vw,1.08rem); line-height:2; margin-bottom:1rem; color:#3a1a20; }
-.lp-sig { font-family:'Playfair Display',serif; font-style:italic; font-size:1.15rem; color:var(--deep); text-align:right; margin-top:1.8rem; }
+
+/* candlelight ambient */
+.candle-light {
+  position: absolute;
+  top: -40px; right: 20px;
+  width: 8px; height: 8px;
+}
+.c-flame {
+  width: 8px; height: 18px;
+  background: linear-gradient(to top, #ff9800, #ffeb3b);
+  border-radius: 50% 50% 20% 20%;
+  animation: flicker 1s ease-in-out infinite alternate;
+  filter: blur(.3px);
+}
+.c-glow {
+  position: absolute;
+  top: -10px; left: -20px;
+  width: 48px; height: 48px;
+  background: radial-gradient(circle, rgba(255,180,0,.35), transparent 70%);
+  border-radius: 50%;
+  animation: glowPulse 1.5s ease-in-out infinite;
+}
+.c-stick {
+  width: 4px; height: 30px;
+  background: linear-gradient(to bottom, #f0d080, #c9a96e);
+  margin: 0 auto;
+}
+
+/* paper */
+.letter-paper {
+  background:
+    linear-gradient(135deg, #fdf6ec 0%, #f5e6d0 50%, #faebd7 100%);
+  color: #2a1418;
+  width: 100%;
+  padding: 3.5rem 3rem 3rem;
+  position: relative;
+  box-shadow:
+    0 2px 0 #e8d5b0,
+    0 4px 0 #dcc89a,
+    0 30px 80px rgba(0,0,0,.7),
+    inset 0 0 40px rgba(212,168,83,.08);
+  /* paper texture lines */
+  background-image:
+    linear-gradient(135deg, #fdf6ec, #f5e6d0 50%, #faebd7),
+    repeating-linear-gradient(
+      transparent,
+      transparent 31px,
+      rgba(194,84,91,.06) 31px,
+      rgba(194,84,91,.06) 32px
+    );
+}
+
+/* fold corner */
+.letter-paper::after {
+  content: '';
+  position: absolute;
+  bottom: 0; right: 0;
+  width: 0; height: 0;
+  border-style: solid;
+  border-width: 0 0 36px 36px;
+  border-color: transparent transparent #e8c99a transparent;
+  filter: drop-shadow(-2px -2px 3px rgba(0,0,0,.15));
+}
+
+/* inner border */
+.letter-paper::before {
+  content: '';
+  position: absolute;
+  inset: 14px;
+  border: 1px solid rgba(194,84,91,.1);
+  pointer-events: none;
+}
+
+.lp-rose {
+  font-size: 1.8rem;
+  text-align: center;
+  display: block;
+  margin-bottom: 1.2rem;
+  opacity: 0;
+  animation: fadeIn .6s 0.3s forwards;
+}
+
+.lp-open {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: clamp(1.1rem,3vw,1.3rem);
+  color: var(--deep);
+  display: block;
+  margin-bottom: 1.4rem;
+  min-height: 1.8rem;
+}
+
+/* typewriter paragraphs */
+.lp-para {
+  font-family: 'Cormorant', serif;
+  font-size: clamp(.98rem,2.5vw,1.06rem);
+  line-height: 2.1;
+  margin-bottom: 1rem;
+  color: #3a1a20;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity .6s ease, transform .6s ease;
+  min-height: 1.5rem;
+}
+.lp-para.visible { opacity: 1; transform: translateY(0); }
+
+.lp-sig {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 1.1rem;
+  color: var(--deep);
+  text-align: right;
+  margin-top: 1.8rem;
+  opacity: 0;
+  transition: opacity .8s ease;
+}
+.lp-sig.visible { opacity: 1; }
+
+/* typewriter cursor */
+.tw-cursor {
+  display: inline-block;
+  width: 2px; height: 1.1em;
+  background: var(--deep);
+  margin-left: 2px;
+  vertical-align: middle;
+  animation: cursorBlink .7s steps(1) infinite;
+}
+@keyframes cursorBlink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+/* wax seal */
+.wax-seal {
+  margin-top: 2rem;
+  width: 60px; height: 60px;
+  background: radial-gradient(circle at 40% 35%, #e8605a, #a01828);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.6rem;
+  box-shadow:
+    0 4px 15px rgba(160,24,40,.5),
+    inset 0 2px 4px rgba(255,255,255,.2);
+  opacity: 0;
+  transform: scale(0) rotate(-20deg);
+  transition: all .6s cubic-bezier(.34,1.56,.64,1);
+}
+.wax-seal.visible { opacity: 1; transform: scale(1) rotate(0deg); }
+
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
 
 /* ══ FINAL ══ */
 #final { min-height:60vh; background:linear-gradient(180deg,#160609,#000); text-align:center; }
@@ -556,18 +698,34 @@ section { min-height:100vh; padding:5rem 1.5rem; display:flex; flex-direction:co
 
   <!-- LETTER -->
   <section id="letter">
-    <p class="tag">Written From the Heart</p>
-    <h2 class="h2">My Letter To You</h2>
-    <div class="divider"></div>
-    <div class="letter-paper reveal">
-      <span class="lp-rose">🌹</span>
-      <span class="lp-open">My Dearest,</span>
-      <p>Some things are too beautiful for words — yet here I am, trying to find them for you. You are the warmth I feel on a cold morning, the calm that wraps around me when everything else feels loud.</p>
-      <p>Every moment we've shared has become a memory I keep close. Your smile, your eyes, the way you look at me — I carry all of it like the most precious thing I've ever been given.</p>
-      <p>This little corner of the internet exists just for us — a quiet place that counts every second we've been together, because every single one of them matters to me.</p>
-      <p>Thank you for choosing me. For staying. For being you. I promise to love you back — not just today, but every single day after.</p>
-      <div class="lp-sig">Forever yours 🌹</div>
+  <p class="tag">Written From the Heart</p>
+  <h2 class="h2">My Letter To You</h2>
+  <div class="divider"></div>
+
+  <div class="letter-scene reveal">
+    <!-- candle -->
+    <div class="candle-light">
+      <div class="c-glow"></div>
+      <div class="c-flame"></div>
+      <div class="c-stick"></div>
     </div>
+
+    <!-- paper -->
+    <div class="letter-paper">
+      <span class="lp-rose">🌹</span>
+      <span class="lp-open" id="lpOpen"></span>
+
+      <p class="lp-para" id="lp1"></p>
+      <p class="lp-para" id="lp2"></p>
+      <p class="lp-para" id="lp3"></p>
+      <p class="lp-para" id="lp4"></p>
+
+      <div class="lp-sig" id="lpSig">Forever yours 🌹</div>
+    </div>
+
+    <!-- wax seal -->
+    <div class="wax-seal" id="waxSeal">🌹</div>
+  </div>
   </section>
   
   <section id="firstchat">
@@ -584,7 +742,7 @@ section { min-height:100vh; padding:5rem 1.5rem; display:flex; flex-direction:co
       <img src="chat.png" alt="Our first conversation"
         style="width:100%;display:block;border-radius:0 0 18px 18px;">
     </div>
-    <p class="chat-caption">It all started from this moment... 🌹</p>
+    <p class="chat-caption">এই মুহূর্ত থেকেই শুরু হয়েছিল সব কিছু... 🌹</p>
   </div>
 </section>
 
@@ -732,6 +890,71 @@ function tryEnter(){
     setTimeout(()=> err.style.display='none', 2500);
   }
 }
+// ── Typewriter Letter
+const letterLines = {
+  open: "My Dearest,",
+  p1: "Some things are too beautiful for words — yet here I am, trying to find them for you. You are the warmth I feel on a cold morning, the calm that wraps around me when everything else feels loud.",
+  p2: "Every moment we've shared has become a memory I keep close. Your smile, your eyes, the way you look at me — I carry all of it like the most precious thing I've ever been given.",
+  p3: "This little corner of the internet exists just for us — a quiet place that counts every second we've been together, because every single one of them matters to me.",
+  p4: "Thank you for choosing me. For staying. For being you. I promise to love you back — not just today, but every single day after."
+};
+
+let letterStarted = false;
+
+function typeText(el, text, speed=28){
+  return new Promise(resolve => {
+    el.classList.add('visible');
+    let i = 0;
+    // add cursor
+    const cursor = document.createElement('span');
+    cursor.className = 'tw-cursor';
+    el.appendChild(cursor);
+
+    const interval = setInterval(()=>{
+      if(i < text.length){
+        cursor.before(document.createTextNode(text[i]));
+        i++;
+      } else {
+        clearInterval(interval);
+        cursor.remove();
+        resolve();
+      }
+    }, speed);
+  });
+}
+
+function delay(ms){ return new Promise(r=>setTimeout(r,ms)); }
+
+async function startLetter(){
+  if(letterStarted) return;
+  letterStarted = true;
+
+  await delay(300);
+  await typeText(document.getElementById('lpOpen'), letterLines.open, 55);
+  await delay(500);
+
+  await typeText(document.getElementById('lp1'), letterLines.p1, 22);
+  await delay(400);
+  await typeText(document.getElementById('lp2'), letterLines.p2, 22);
+  await delay(400);
+  await typeText(document.getElementById('lp3'), letterLines.p3, 22);
+  await delay(400);
+  await typeText(document.getElementById('lp4'), letterLines.p4, 22);
+
+  await delay(700);
+  document.getElementById('lpSig').classList.add('visible');
+  await delay(600);
+  document.getElementById('waxSeal').classList.add('visible');
+}
+
+// letter section screen-এ আসলে start হবে
+const letterObs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting) startLetter();
+  });
+},{threshold:0.3});
+const letterSec = document.getElementById('letter');
+if(letterSec) letterObs.observe(letterSec);
 </script>
 <!-- ANNIVERSARY POPUP -->
 <div class="anni-popup" id="anniPopup">
