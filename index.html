@@ -331,6 +331,85 @@ section { min-height:100vh; padding:5rem 1.5rem; display:flex; flex-direction:co
   .t-unit { min-width:56px; padding:.75rem .9rem; }
   .letter-paper { padding:2.5rem 1.6rem; }
 }
+/* ══ ANNIVERSARY POPUP ══ */
+.anni-popup {
+  position: fixed; inset: 0; z-index: 99998;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,.85); backdrop-filter: blur(8px);
+  opacity: 0; visibility: hidden;
+  transition: opacity .8s ease, visibility .8s;
+}
+.anni-popup.show { opacity: 1; visibility: visible; }
+.anni-box {
+  background: linear-gradient(135deg, #2a0d15, #1a0a0e);
+  border: 1px solid rgba(201,169,110,.4);
+  padding: 3rem 2.5rem;
+  max-width: 360px; width: 90%;
+  text-align: center;
+  position: relative;
+  animation: popIn .6s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes popIn { from{transform:scale(.8);opacity:0} to{transform:scale(1);opacity:1} }
+.anni-emoji { font-size: 3.5rem; display: block; margin-bottom: 1rem; animation: heartPulse 1.5s ease-in-out infinite; }
+.anni-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.3rem, 5vw, 1.9rem);
+  color: var(--gold);
+  margin-bottom: .6rem;
+}
+.anni-sub {
+  font-family: 'Cormorant', serif;
+  font-style: italic;
+  font-size: 1rem; color: var(--blush);
+  line-height: 1.7; opacity: .85;
+  margin-bottom: 1.8rem;
+}
+.anni-month {
+  font-family: 'Cinzel', serif;
+  font-size: 2.5rem; color: var(--rose);
+  display: block; margin-bottom: .3rem;
+  text-shadow: 0 0 30px rgba(194,84,91,.7);
+}
+.anni-close {
+  background: none; border: 1px solid rgba(201,169,110,.35);
+  color: var(--gold); font-family: 'Tenor Sans', sans-serif;
+  font-size: .85rem; letter-spacing: .2em;
+  padding: .7rem 2rem; cursor: pointer; transition: all .3s;
+}
+.anni-close:hover { background: var(--rose); border-color: var(--rose); color: #fff; }
+/* confetti */
+.conf { position: absolute; pointer-events: none; font-size: .9rem; animation: confFall linear infinite; }
+@keyframes confFall {
+  0%   { transform: translateY(-20px) rotate(0); opacity: 1; }
+  100% { transform: translateY(320px) rotate(540deg); opacity: 0; }
+}
+.e-name-wrap { display:flex; flex-direction:column; align-items:center; gap:1rem; }
+.e-name-input {
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(201,169,110,.35);
+  color: var(--cream);
+  font-family: 'Cormorant', serif;
+  font-style: italic;
+  font-size: 1.1rem;
+  text-align: center;
+  letter-spacing: .1em;
+  padding: .85rem 2rem;
+  outline: none;
+  width: min(280px, 80vw);
+  transition: border-color .3s;
+  opacity: 0;
+  animation: fadeUp .8s 1.1s forwards;
+}
+.e-name-input:focus { border-color: var(--rose); }
+.e-name-input::placeholder { color: rgba(232,180,184,.35); }
+.e-err {
+  font-family: 'Cormorant', serif;
+  font-style: italic;
+  font-size: .85rem;
+  color: var(--rose);
+  display: none;
+  animation: fadeUp .3s ease;
+}
 </style>
 </head>
 <body>
@@ -346,7 +425,13 @@ section { min-height:100vh; padding:5rem 1.5rem; display:flex; flex-direction:co
   <h1 class="e-title">You & Me</h1>
   <p class="e-sub">every second, growing stronger</p>
   <div class="e-line"></div>
-  <button class="e-btn" onclick="enter()">Enter With Love &nbsp;💌</button>
+  <div class="e-name-wrap">
+  <input class="e-name-input" id="nameInput" type="text"
+    placeholder="তোমার নাম লিখো..."
+    onkeydown="if(event.key==='Enter') tryEnter()">
+  <button class="e-btn" onclick="tryEnter()">Enter With Love &nbsp;💌</button>
+  <p class="e-err" id="nameErr">❌ নামটা ঠিক নেই...</p>
+</div>
   <p class="e-hint">♪ &nbsp;music plays when you enter &nbsp;♪</p>
 </div>
 
@@ -553,6 +638,58 @@ aud.addEventListener('timeupdate',()=>{ const p=aud.duration?(aud.currentTime/au
 document.getElementById('mProg').addEventListener('click',function(e){ const r=this.getBoundingClientRect(); if(aud.duration)aud.currentTime=((e.clientX-r.left)/r.width)*aud.duration; });
 function seekBack(){ aud.currentTime=Math.max(0,aud.currentTime-10); }
 function seekFwd(){ aud.currentTime=Math.min(aud.duration||0,aud.currentTime+10); }
+// ── Anniversary Popup (27 তারিখ, ২৪ ঘন্টা)
+function checkAnniversary(){
+  const now = new Date();
+  const day = now.getDate();
+  const key = `anni_${now.getFullYear()}_${now.getMonth()}`;
+  if(day === 27 && !localStorage.getItem(key)){
+    // month count
+    const diff = (now.getFullYear()-2025)*12 + (now.getMonth()-11);
+    const months = Math.max(1, diff);
+    document.getElementById('anniMonth').textContent = `${months} Month${months>1?'s':''}`;
+    // confetti
+    const cf = document.getElementById('anniConf');
+    ['🌸','🌹','✨','💕','🎊'].forEach(e=>{
+      for(let i=0;i<6;i++){
+        const c = document.createElement('div'); c.className='conf'; c.textContent=e;
+        c.style.cssText=`left:${Math.random()*100}%;top:0;animation-duration:${1.5+Math.random()*2}s;animation-delay:${Math.random()*2}s;`;
+        cf.appendChild(c);
+      }
+    });
+    document.getElementById('anniPopup').classList.add('show');
+    // ২৪ ঘন্টা পর auto hide
+    localStorage.setItem(key, '1');
+  }
+}
+function closeAnni(){ document.getElementById('anniPopup').classList.remove('show'); }
+checkAnniversary();
+// ── Name gate (এখানে তার নাম বসাও)
+const HER_NAME = "tahiya"; // ← শুধু এইটুকু বদলাও
+
+function tryEnter(){
+  const val = document.getElementById('nameInput').value.trim().toLowerCase();
+  if(val === HER_NAME.toLowerCase()){
+    document.getElementById('nameErr').style.display = 'none';
+    enter(); // existing enter function
+  } else {
+    const err = document.getElementById('nameErr');
+    err.style.display = 'block';
+    document.getElementById('nameInput').value = '';
+    setTimeout(()=> err.style.display='none', 2500);
+  }
+}
 </script>
+<!-- ANNIVERSARY POPUP -->
+<div class="anni-popup" id="anniPopup">
+  <div class="anni-box" id="anniBox">
+    <div id="anniConf"></div>
+    <span class="anni-emoji">🎉</span>
+    <span class="anni-month" id="anniMonth"></span>
+    <div class="anni-title">Happy Anniversary!</div>
+    <p class="anni-sub">আরেকটি মাস পেরিয়ে গেল তোমার সাথে —<br>প্রতিটি মুহূর্ত ছিল অমূল্য। 🌹</p>
+    <button class="anni-close" onclick="closeAnni()">Close &nbsp;💌</button>
+  </div>
+</div>
 </body>
 </html>
